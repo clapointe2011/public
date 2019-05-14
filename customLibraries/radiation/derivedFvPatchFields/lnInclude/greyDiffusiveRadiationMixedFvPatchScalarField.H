@@ -1,0 +1,1 @@
+../greyDiffusiveRadiation/greyDiffusiveRadiationMixedFvPatchScalarField.H

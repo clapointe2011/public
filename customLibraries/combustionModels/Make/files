@@ -1,0 +1,6 @@
+combustionModel/combustionModel.C
+CombustionModel/CombustionModel/CombustionModels.C
+
+eddyDissipationDiffusionModel/eddyDissipationDiffusionModels.C
+
+LIB = $(FOAM_USER_LIBBIN)/libAMRcombustionModels
