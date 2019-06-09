@@ -1,5 +1,0 @@
-dynamicFvMesh/dynamicFvMesh.C
-dynamicFvMesh/dynamicFvMeshNew.C
-dynamicRefineFvMesh/dynamicRefineFvMesh.C
-
-LIB = $(FOAM_USER_LIBBIN)/libAMRdynamicFvMesh

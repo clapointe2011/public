@@ -1,1 +1,0 @@
-../viewFactor/viewFactor.C

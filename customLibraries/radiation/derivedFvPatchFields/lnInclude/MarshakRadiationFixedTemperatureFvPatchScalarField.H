@@ -1,1 +1,0 @@
-../MarshakRadiationFixedTemperature/MarshakRadiationFixedTemperatureFvPatchScalarField.H

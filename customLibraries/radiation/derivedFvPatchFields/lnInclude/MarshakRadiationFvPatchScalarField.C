@@ -1,1 +1,0 @@
-../MarshakRadiation/MarshakRadiationFvPatchScalarField.C

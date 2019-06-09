@@ -1,1 +1,0 @@
-../wideBandDiffusiveRadiation/wideBandDiffusiveRadiationMixedFvPatchScalarField.C

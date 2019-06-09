@@ -1,1 +1,0 @@
-../fvDOM/radiativeIntensityRay/radiativeIntensityRayI.H
