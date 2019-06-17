@@ -22,17 +22,25 @@ solvers
 	solver		diagonal;
     }
 
-    "(p_rgh|ph_rgh|pcorr|pcorr_0).*"
+    "(p_rgh|ph_rgh).*"
     {
         solver          PCG;
         preconditioner
         {
             preconditioner  GAMG;
+            smoother        DICGaussSeidel;
             tolerance       1e-06;
             relTol          0;
-            smoother        DICGaussSeidel;
         }
         tolerance       1e-06;
+        relTol          0;
+    }
+    
+    "(pcorr|pcorr_0).*"
+    {
+        $p_rgh;
+        maxIter         1;
+        tolerance       1e-4;
         relTol          0;
     }
 
@@ -87,9 +95,8 @@ PIMPLE
 
     //Custom controls
     correctPhi      true;
-    nCorrPhi        2;
+    nCorrPhi        1;
     startDyMIndex   1;
-    protectOutlet   true;
 }
 
 relaxationFactors

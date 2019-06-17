@@ -31,7 +31,12 @@ LES
     {
         Ck      0.03;
     }
-    
+
+    dynamicSmagorinskyCoeffs
+    {
+        filter simple;
+    }
+
     smoothCoeffs
     {
         delta      cubeRootVol;

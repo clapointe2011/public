@@ -2,7 +2,7 @@
 
 rm -rf 0
 
-rm constant/polyMesh/
+rm constant/polyMesh/*gz
 
 rm -rf runFiles
 

@@ -33,13 +33,6 @@ solverFreq 1;
 
 absorptionEmissionModel greyMeanAbsorptionEmission;
 
-constantAbsorptionEmissionCoeffs
-{
-    absorptivity    absorptivity    [ m^-1 ]       0;
-    emissivity      emissivity      [ m^-1 ]       0;
-    E               E               [ kg m^-1 s^-3 ]  0.2;
-}
-
 constRadFractionEmissionCoeffs
 {
     //Proportionality constant (EhrrCoeff*HRR) to be emitted. Source term in

@@ -4,9 +4,8 @@ cp -rf 0_backup 0
 
 echo "building mesh"
 blockMesh > log.blockMesh
+snappyHexMesh -overwrite > log.snappyHexMesh
 
-topoSet -dict system/topoSetDict1 > log.topoSet1
-createPatch -dict system/createPatchDict -overwrite > log.createPatch
 decomposePar > log.decomposePar
 renumberMesh -overwrite > log.renumberMesh
 
@@ -14,6 +13,7 @@ mkdir runFiles
 mv log* runFiles
 
 echo "running solver"
-mpirun -np 4 diffusionFireFoam -parallel > log.diffusionFireFoam 2>&1
+mpirun -np 3 diffusionFireFoam -parallel > log.diffusionFireFoam 2>&1
 
+postProcess -func sample
 #------------------------------------------------------------------------------

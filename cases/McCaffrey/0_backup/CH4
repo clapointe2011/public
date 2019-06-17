@@ -35,12 +35,12 @@ boundaryField
 
     inlet
     {
-        //type                totalFlowRateAdvectiveDiffusive;
-        //massFluxFraction    1.0;
-        //value               $internalField;
+        type                totalFlowRateAdvectiveDiffusive;
+        massFluxFraction    1.0;
+        value               $internalField;
 
-	type		fixedValue;
-        value		uniform 1;
+	//type		fixedValue;
+        //value		uniform 1;
     }
 }
 

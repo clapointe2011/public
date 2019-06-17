@@ -25,10 +25,18 @@
     // Make the fluxes absolute
     fvc::makeAbsolute(phi, rho, U);
     fvc::makeAbsolute(phi.oldTime(), rho.oldTime(), U.oldTime());
+    if (ddtSchemeName == "backward")
+    {
+        fvc::makeAbsolute(phi.oldTime().oldTime(), rho.oldTime().oldTime(), U.oldTime().oldTime());
+    }
     
     // Store momentum to set phi/phi_0 for introduced faces.
     rhoU() = rho*U;
     rhoU_0() = rho.oldTime()*U.oldTime();
+    if (ddtSchemeName == "backward")
+    {
+        rhoU_0_0() = rho.oldTime().oldTime()*U.oldTime().oldTime();
+    }
     
     mesh.update();
 
@@ -45,15 +53,20 @@
             //CL explicitly update phi/phi_0/phi_0_0
             phi = mesh.Sf() & fvc::interpolate(rhoU());
             phi.oldTime() = mesh.Sf() & fvc::interpolate(rhoU_0());
-        
-            for (int i = 0; i < nCorrPhi; i++)
+            if (ddtSchemeName == "backward")
             {
-                #include "correctPhi.H"
+                phi.oldTime().oldTime() = mesh.Sf() & fvc::interpolate(rhoU_0_0());
             }
+        
+            #include "correctPhi.H"
                             
             // Make the fluxes relative to the mesh motion
             fvc::makeRelative(phi, rho, U);
             fvc::makeRelative(phi.oldTime(), rho.oldTime(), U.oldTime());
+            if (ddtSchemeName == "backward")
+            {
+                fvc::makeRelative(phi.oldTime().oldTime(), rho.oldTime().oldTime(), U.oldTime().oldTime());
+            }
         }
     }
 

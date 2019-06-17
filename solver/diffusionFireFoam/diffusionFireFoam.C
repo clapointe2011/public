@@ -44,6 +44,7 @@ Description
 #include "motionSolver.H"
 #include "dynamicRefineFvMesh.H"
 #include "bound.H"
+#include "backwardDdtScheme.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
     #include "createFields.H"
     #include "createFieldRefs.H"
     #include "createRDeltaT.H"
-    #include "createDyMControls.H"
+    #include "createCustomControls.H"
     
     autoPtr<volVectorField> rhoU;
     {
@@ -71,6 +72,13 @@ int main(int argc, char *argv[])
     {
         rhoU_0 = new volVectorField("rhoU_0", rhoU);
     }
+    
+    autoPtr<volVectorField> rhoU_0_0;
+    {
+        rhoU_0_0 = new volVectorField("rhoU_0_0", rhoU);
+    }
+    
+    word ddtSchemeName(U.mesh().ddtScheme(U.name()));
 
     turbulence->validate();
 
@@ -121,6 +129,16 @@ int main(int argc, char *argv[])
             (
                 "divrhoU_0",
                 fvc::div(fvc::absolute(phi.oldTime(), rho.oldTime(), U.oldTime()))
+            );
+        }
+        
+        autoPtr<volScalarField> divrhoU_0_0;
+        if (correctPhi && ddtSchemeName == "backward")
+        {
+            divrhoU_0_0 = new volScalarField
+            (
+                "divrhoU_0_0",
+                fvc::div(fvc::absolute(phi.oldTime().oldTime(), rho.oldTime().oldTime(), U.oldTime().oldTime()))
             );
         }
         

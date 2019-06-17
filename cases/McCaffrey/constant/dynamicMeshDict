@@ -23,7 +23,7 @@ dynamicRefineFvMeshCoeffs
     refineInterval 1;
 
     // Field to be refinement on
-    fields        (CH4 sQ sEnst);
+    fields        (CH4 sQ magVort);
     
     //Refinement field dictionaries 
     CH4
@@ -32,19 +32,19 @@ dynamicRefineFvMeshCoeffs
         upperRefineLevel    1;
         unrefineLevel       0.001;
     }
-    
+
     sQ
     {
-        lowerRefineLevel    0.1;
+        lowerRefineLevel    0.001;
         upperRefineLevel    1;
-        unrefineLevel       0.1;
+        unrefineLevel       0.001;
     }
-    
-    sEnst
+
+    magVort
     {
-        lowerRefineLevel    0.1;
+        lowerRefineLevel    0.33;
         upperRefineLevel    1;
-        unrefineLevel       0.1;
+        unrefineLevel       0.33;
     }
 
     // Have slower than 2:1 refinement
@@ -52,9 +52,9 @@ dynamicRefineFvMeshCoeffs
 
     // Refine cells only up to maxRefinement levels
     maxRefinement   3;
-
+    
     // Stop refinement if maxCells reached
-    maxCells        1000000;
+    maxCells        150000;
 
     // Flux field and corresponding velocity field. Fluxes on changed
     // faces get recalculated by interpolating the velocity. Use 'none'
@@ -63,7 +63,7 @@ dynamicRefineFvMeshCoeffs
     (
         (phi none)
         (phi_0 none)
-	(phi_0_0 none)
+        (phi_0_0 none)
         (ghf none)
     );
 

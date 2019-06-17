@@ -18,6 +18,13 @@ FoamFile
 
 combustionModel eddyDissipationDiffusionModel;
 //combustionModel infinitelyFastChemistry;
+//combustionModel   multiEDM;
+
+multiEDMCoeffs
+{
+    semiImplicit no;
+}
+
 
 infinitelyFastChemistryCoeffs
 {
@@ -30,6 +37,11 @@ eddyDissipationDiffusionModelCoeffs
     semiImplicit no;
     C_EDC   4;
     C_Diff  0;
+}
+
+multiEDMCoeffs
+{
+    semiImplicit no;
 }
 
 

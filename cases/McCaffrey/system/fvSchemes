@@ -31,7 +31,7 @@ divSchemes
     limited01       limitedLinear01 1;
 
     default         none;
-    div(phi,U)      Gauss linear;
+    div(phi,U)      Gauss LUST grad(U);
     div(phi,K)      Gauss $limited;
     div(phi,k)      Gauss $limited;
     div(phi,Yi_h)   Gauss multivariateSelection

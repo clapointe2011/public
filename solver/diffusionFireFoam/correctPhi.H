@@ -45,12 +45,14 @@
         dimensionedScalar("pcorr_0", p.dimensions(), 0.0),
         pcorrTypes
     );
+
+    mesh.setFluxRequired(pcorr.name());
+    mesh.setFluxRequired(pcorr_0.name());
     
     dimensionedScalar rAUf("rAUf", dimTime, 1.0);
 
-    mesh.setFluxRequired(pcorr.name());
-
     //CL flux corrections
+    for (int i = 0; i<nCorrPhi; i++)
     {
         // Solve for pcorr such that the divergence of the corrected flux
         // matches the divRhoU provided (from previous iteration, time-step...)
@@ -84,12 +86,55 @@
 
         pcorrEqn_0.solve
         (
-            mesh.solver(pcorr_0.select(pimple.finalNonOrthogonalIter()))
+            mesh.solver(pcorr.select(pimple.finalNonOrthogonalIter()))
         );
 
         if (pimple.finalNonOrthogonalIter())
         {
             phi.oldTime() += pcorrEqn_0.flux();
+        }
+    }
+    
+    if (ddtSchemeName == "backward")
+    {
+        correctUphiBCs(rho.oldTime().oldTime(), U.oldTime().oldTime(), phi.oldTime().oldTime());
+        
+        volScalarField pcorr_0_0
+        (
+            IOobject
+            (
+                "pcorr_0_0",
+                mesh
+            ),
+            mesh,
+            dimensionedScalar("pcorr_0_0", p.dimensions(), 0.0),
+            pcorrTypes
+        );
+        
+        mesh.setFluxRequired(pcorr_0_0.name());
+        
+        //CL flux corrections
+        for (int i = 0; i<nCorrPhi; i++)
+        {   
+            // Solve for pcorr such that the divergence of the corrected flux
+            // matches the divRhoU provided (from previous iteration, time-step...)
+            fvScalarMatrix pcorrEqn_0_0
+            (
+                fvc::div(phi.oldTime().oldTime())
+              - fvm::laplacian(rAUf, pcorr_0_0)
+             ==
+                divrhoU_0_0()
+            );
+
+            pcorrEqn_0_0.solve
+            (
+                mesh.solver(pcorr.select(pimple.finalNonOrthogonalIter()))
+            );
+
+            if (pimple.finalNonOrthogonalIter())
+            {
+                phi.oldTime().oldTime() += pcorrEqn_0_0.flux();
+            }
         }
     }
 }

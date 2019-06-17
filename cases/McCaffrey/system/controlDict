@@ -14,7 +14,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-libs ( "libOpenFOAM.so" ) ;
+libs ( "libOpenFOAM.so" "libcustomFvPatchFields.so" ) ;
 
 application     diffusionFireFoam;
 
@@ -24,7 +24,7 @@ startTime       0.0;
 
 stopAt          endTime;
 
-endTime         15;
+endTime         20;
 
 deltaT          1e-5;
 
@@ -71,13 +71,11 @@ functions
        codeExecute
        #{ 
           const volScalarField& rho = mesh().lookupObject<volScalarField>("rho");
-          //const volScalarField& delta = mesh().lookupObject<volScalarField>("delta");
           
-          volVectorField gradRho = fvc::grad(rho);
-          volScalarField divRho = mag(gradRho.component(0)) + mag(gradRho.component(1)) + mag(gradRho.component(2));
-          //volScalarField divRho = mag(gradRho);
-          //divRho *= delta;
+          //volVectorField gradRho = fvc::grad(rho);
+          //volScalarField divRho = mag(gradRho.component(0)) + mag(gradRho.component(1)) + mag(gradRho.component(2));
           //divRho.ref() *= pow(mesh().V(),1/3);
+          volScalarField divRho = mag(fvc::grad(rho));
           divRho -= min(divRho);
           divRho /= max(divRho);
           
@@ -108,8 +106,8 @@ functions
           varRho = divRho;
       #};
     }*/
-
-    Enstrophy
+    
+    /*Enstrophy
     {
        libs ("libutilityFunctionObjects.so");
 
@@ -151,14 +149,101 @@ functions
 
           sEnst = tenst;
       #};
-    }
-    
-    /*sRate
+    }*/
+
+    sQdot
     {
        libs ("libutilityFunctionObjects.so");
 
        type coded;
-       name sRate;
+       name sQdot;
+
+       codeExecute
+       #{
+          const volScalarField& Qdot = mesh().lookupObject<volScalarField>("Qdot");
+
+          volScalarField q = Qdot;
+          q -= min(q);
+          q /= max(q);
+
+          static autoPtr<volScalarField> pField;
+          if(!pField.valid())
+          {
+              pField.set
+              (
+                  new volScalarField
+                  (
+                      IOobject
+                      (
+                          "sQ",
+                          mesh().time().timeName(),
+                          Qdot.mesh(),
+                          IOobject::NO_READ,
+                          IOobject::AUTO_WRITE
+                      ),
+                      q
+                  )
+              );
+          }
+
+          volScalarField& sQ = pField();
+
+          sQ.checkIn();
+
+          sQ = q;
+      #};
+    }
+
+    vorticity
+    {
+       libs ("libutilityFunctionObjects.so");
+
+       type coded;
+       name vorticity;
+
+       codeExecute
+       #{
+          const volVectorField& U = mesh().lookupObject<volVectorField>("U");
+
+          volScalarField tvort = mag(fvc::curl(U));
+
+          tvort -= min(tvort);
+          tvort /= max(tvort);
+
+          static autoPtr<volScalarField> pField;
+          if(!pField.valid())
+          {
+              pField.set
+              (
+                  new volScalarField
+                  (
+                      IOobject
+                      (
+                          "magVort",
+                          mesh().time().timeName(),
+                          U.mesh(),
+                          IOobject::NO_READ,
+                          IOobject::AUTO_WRITE
+                      ),
+                      tvort
+                  )
+              );
+          }
+
+          volScalarField& magVort = pField();
+
+          magVort.checkIn();
+
+          magVort = tvort;
+      #};
+    }
+
+    /*varU
+    {
+       libs ("libutilityFunctionObjects.so");
+
+       type coded;
+       name varU;
 
        codeExecute
        #{
@@ -178,7 +263,7 @@ functions
                   (
                       IOobject
                       (
-                          "sRate",
+                          "varU",
                           mesh().time().timeName(),
                           U.mesh(),
                           IOobject::NO_READ,
@@ -189,14 +274,14 @@ functions
               );
           }
 
-          volScalarField& sRate = pField();
+          volScalarField& varU = pField();
 
-          sRate.checkIn();
+          varU.checkIn();
 
-          sRate = tS;
+          varU = tS;
       #};
     }*/
-
+    
     /*rRho
     {
        libs ("libutilityFunctionObjects.so");
@@ -237,144 +322,6 @@ functions
           rRho.checkIn();
           
           rRho = rrho;
-      #};
-    }*/
-
-    sQ
-    {
-       libs ("libutilityFunctionObjects.so");
-        
-       type coded;
-       name rRho;
-
-       codeExecute
-       #{
-          const volScalarField& Qdot = mesh().lookupObject<volScalarField>("Qdot");
-          
-          volScalarField qdot = Qdot;
-          qdot -= min(qdot);
-          qdot /= max(qdot);
-          
-          static autoPtr<volScalarField> pField;
-          if(!pField.valid())
-          {
-              pField.set
-              (
-                  new volScalarField
-                  (
-                      IOobject
-                      (
-                          "sQ",
-                          mesh().time().timeName(),
-                          Qdot.mesh(),
-                          IOobject::NO_READ,
-                          IOobject::AUTO_WRITE
-                      ),
-                      qdot
-                  )
-              );
-          }
-          
-          volScalarField& sQ = pField();
-          
-          sQ.checkIn();
-          
-          sQ = qdot;
-      #};
-    }
-    
-    /*Xi
-    {
-       libs ("libutilityFunctionObjects.so");
-        
-       type coded;
-       name Xi;
-
-       codeExecute
-       #{
-          const volScalarField& rho = mesh().lookupObject<volScalarField>("rho");
-          const volVectorField& U = mesh().lookupObject<volVectorField>("U");
-          
-          volScalarField rrho = 1/(rho + dimensionedScalar("VSMALL",dimDensity,VSMALL));
-          rrho -= min(rrho);
-          rrho /= max(rrho);
-          
-          volScalarField xi = rrho;
-          
-          if (mesh().time().value() > 0.1)
-          {
-              volScalarField sRate = mag(fvc::grad(U));
-              sRate -= min(sRate);
-              sRate /= max(sRate);
-          
-              xi = 3*rrho + 2*sRate;
-              xi /= max(xi);
-          }
-          
-          static autoPtr<volScalarField> pField;
-          if(!pField.valid())
-          {
-              pField.set
-              (
-                  new volScalarField
-                  (
-                      IOobject
-                      (
-                          "Xi",
-                          mesh().time().timeName(),
-                          rho.mesh(),
-                          IOobject::NO_READ,
-                          IOobject::AUTO_WRITE
-                      ),
-                      xi
-                  )
-              );
-          }
-          
-          volScalarField& Xi = pField();
-          
-          Xi.checkIn();
-          
-          Xi = xi;
-      #};
-    }*/
-    
-    /*LESdelta
-    {
-       libs ("libutilityFunctionObjects.so");
-        
-       type coded;
-       name LESdelta;
-
-       codeExecute
-       #{
-          const volScalarField& delta = mesh().lookupObject<volScalarField>("rho");
-          
-          static autoPtr<volScalarField> pField;
-          if(!pField.valid())
-          {
-              pField.set
-              (
-                  new volScalarField
-                  (
-                      IOobject
-                      (
-                          "LESdelta",
-                          mesh().time().timeName(),
-                          delta.mesh(),
-                          IOobject::NO_READ,
-                          IOobject::AUTO_WRITE
-                      ),
-                      delta
-                  )
-              );
-          }
-          
-          volScalarField& LESdelta = pField();
-          
-          LESdelta.checkIn();
-          
-          LESdelta = delta;
       #};
     }*/
 }
