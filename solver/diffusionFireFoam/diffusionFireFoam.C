@@ -24,6 +24,10 @@ License
 Application
     fireFoam
 
+Author
+    Adapted from original fireFoam code for use with AMR by Caelan Lapointe
+    and Peter Hamlington.
+
 Description
     Transient solver for fires and turbulent diffusion flames with reacting
     particle clouds, surface film and pyrolysis modelling.

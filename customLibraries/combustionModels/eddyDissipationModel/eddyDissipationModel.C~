@@ -7,19 +7,23 @@
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
+
     OpenFOAM is free software: you can redistribute it and/or modify it
     under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
     for more details.
+
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+
 \*---------------------------------------------------------------------------*/
 
-#include "eddyDissipationDiffusionModel.H"
+#include "eddyDissipationModel.H"
 
 namespace Foam
 {
@@ -29,7 +33,7 @@ namespace combustionModels
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class ReactionThermo, class ThermoType>
-eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::eddyDissipationDiffusionModel
+eddyDissipationModel<ReactionThermo, ThermoType>::eddyDissipationModel
 (
     const word& modelType,
     ReactionThermo& thermo,
@@ -45,14 +49,15 @@ eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::eddyDissipationDiffus
         combustionProperties
     ),
     C_(readScalar(this->coeffs().lookup("C_EDC"))),
-    Cd_(readScalar(this->coeffs().lookup("C_Diff")))
+    Cd_(readScalar(this->coeffs().lookup("C_Diff"))),
+    Cstiff_(readScalar(this->coeffs().lookup("C_Stiff")))
 {}
 
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
 template<class ReactionThermo, class ThermoType>
-eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::~eddyDissipationDiffusionModel()
+eddyDissipationModel<ReactionThermo, ThermoType>::~eddyDissipationModel()
 {}
 
 
@@ -60,7 +65,7 @@ eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::~eddyDissipationDiffu
 
 template<class ReactionThermo, class ThermoType>
 Foam::tmp<Foam::volScalarField>
-eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::rtTurb() const
+eddyDissipationModel<ReactionThermo, ThermoType>::rtTurb() const
 {
     return C_*this->turbulence().epsilon()/
               max(this->turbulence().k(),
@@ -69,7 +74,7 @@ eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::rtTurb() const
 
 template<class ReactionThermo, class ThermoType>
 Foam::tmp<Foam::volScalarField>
-eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::rtDiff() const
+eddyDissipationModel<ReactionThermo, ThermoType>::rtDiff() const
 {
     const volScalarField& YO2 = this->thermo().composition().Y("O2");
     const compressible::LESModel& lesModel =
@@ -82,7 +87,7 @@ eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::rtDiff() const
 }
 
 template<class ReactionThermo, class ThermoType>
-void eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::correct()
+void eddyDissipationModel<ReactionThermo, ThermoType>::correct()
 {
     this->wFuel_ ==
         dimensionedScalar("zero", dimMass/pow3(dimLength)/dimTime, 0.0);
@@ -98,17 +103,20 @@ void eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::correct()
     if (this->thermo().composition().contains("O2"))
     {
         const volScalarField& YO2 = this->thermo().composition().Y("O2");
+        
+        volScalarField rt(max(rtTurb(),rtDiff())); 
 
         this->wFuel_ ==
               this->rho()
             * min(YFuel, YO2/s.value())
-            * max(rtTurb(),rtDiff());
+            / this->mesh().time().deltaT() / Cstiff_
+            * (1 - exp(- Cstiff_*this->mesh().time().deltaT() * rt));
     }
 }
 
 
 template<class ReactionThermo, class ThermoType>
-bool eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::read()
+bool eddyDissipationModel<ReactionThermo, ThermoType>::read()
 {
     if (singleStepCombustion<ReactionThermo, ThermoType>::read())
     {
@@ -128,4 +136,3 @@ bool eddyDissipationDiffusionModel<ReactionThermo, ThermoType>::read()
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-

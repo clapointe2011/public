@@ -17,8 +17,6 @@ License
     for more details.
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
-    
-    Adapted from original dynamicRefineFvMesh by Caelan Lapointe
 \*---------------------------------------------------------------------------*/
 
 #include "dynamicRefineFvMesh.H"
@@ -1267,6 +1265,8 @@ bool Foam::dynamicRefineFvMesh::update()
         }
         
         const label nBufferLayers = readLabel(refineDict.lookup("nBufferLayers"));
+  
+        //*********************************************************************//
 
         const wordList fieldNames(refineDict.lookup("fields"));
         
@@ -1311,6 +1311,16 @@ bool Foam::dynamicRefineFvMesh::update()
                     }
                 }
             }
+            
+            /*if (fieldi == 0){
+                refineCell = candidateCell;
+            }else{
+                forAll(candidateCell,celli){
+                    if (refineCell[celli] == 0 && candidateCell[celli] == 1){
+                        refineCell[celli] = 1;
+                    }
+                }
+            }*/
             
             if (fieldi == 0){
                 refineCell = candidateCell;
@@ -1457,7 +1467,9 @@ bool Foam::dynamicRefineFvMesh::update()
         );
             
         Info << "Selected " << nSplitUnrefCellMutual << " mutual split points." << endl;
-
+        
+        //********************************************************************************************//
+        
         {
             if (nSplitUnrefCellMutual > 0)
             {

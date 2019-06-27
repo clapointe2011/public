@@ -20,6 +20,8 @@ License
 
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+    
+    Adapted from original fvDOM code for use with AMR by Caelan Lapointe
 
 \*---------------------------------------------------------------------------*/
 
@@ -409,11 +411,7 @@ bool Foam::radiation::fvDOM::read()
 
 void Foam::radiation::fvDOM::calculate()
 {
-    const fvMesh& mesh = mesh_;
-
-    pimpleControl pimple(mesh);
-
-    if (mesh_.changing() && pimple.firstIter())
+    if (mesh_.dynamic())
     {
         initialise();
     }

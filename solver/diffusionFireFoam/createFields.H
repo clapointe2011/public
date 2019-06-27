@@ -88,6 +88,19 @@ volScalarField p_rgh
 
 mesh.setFluxRequired(p_rgh.name());
 
+volScalarField ph_rgh
+(
+    IOobject
+    (
+        "ph_rgh",
+        runTime.timeName(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh
+);
+
 #include "phrghEqn.H"
 
 

@@ -1,34 +1,46 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
-    \\  /    A nd           | Copyright (C) 2011 OpenFOAM Foundation
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Copyright (C) 2011-2018 OpenFOAM Foundation
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
 License
+    This file is part of OpenFOAM.
+
     OpenFOAM is free software: you can redistribute it and/or modify it
     under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     OpenFOAM is distributed in the hope that it will be useful, but WITHOUT
     ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
     FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
     for more details.
+
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+
 Class
-    Foam::combustionModels::eddyDissipationDiffusionModel
+    Foam::combustionModels::eddyDissipationModel
+
 Description
-    Eddy dissipation model based on the principle of mixed is burnt. 
+    Simple infinitely fast chemistry combustion model based on the principle
+    mixed is burnt. Additional parameter C is used to distribute the heat
+    release rate.in time
+
 SourceFiles
-    eddyDissipationDiffusionModel.C
+    eddyDissipationModel.C
+
 \*---------------------------------------------------------------------------*/
 
-#ifndef eddyDissipationDiffusionModel_H
-#define eddyDissipationDiffusionModel_H
+#ifndef eddyDissipationModel_H
+#define eddyDissipationModel_H
+
 #include "singleStepCombustion.H"
 
 #include "LESModel.H"
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
@@ -37,13 +49,13 @@ namespace combustionModels
 {
 
 /*---------------------------------------------------------------------------*\
-                  Class eddyDissipationDiffusionModel Declaration
+                  Class eddyDissipationModel Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class ReactionThermo, class ThermoType>
-class eddyDissipationDiffusionModel
+class eddyDissipationModel
 :
-    public singleStepCombustion <ReactionThermo, ThermoType>
+    public singleStepCombustion<ReactionThermo, ThermoType>
 {
     // Private data
 
@@ -51,6 +63,9 @@ class eddyDissipationDiffusionModel
         scalar C_;
 
         scalar Cd_;
+
+        scalar Cstiff_;
+
 
     // Private Member Functions
 
@@ -61,22 +76,22 @@ class eddyDissipationDiffusionModel
         tmp<volScalarField> rtDiff() const;
 
         //- Disallow copy construct
-        eddyDissipationDiffusionModel(const eddyDissipationDiffusionModel&);
+        eddyDissipationModel(const eddyDissipationModel&);
 
         //- Disallow default bitwise assignment
-        void operator=(const eddyDissipationDiffusionModel&);
+        void operator=(const eddyDissipationModel&);
 
-       
+
 public:
 
     //- Runtime type information
-    TypeName("eddyDissipationDiffusionModel");
+    TypeName("eddyDissipationModel");
 
 
     // Constructors
 
         //- Construct from components
-        eddyDissipationDiffusionModel
+        eddyDissipationModel
         (
             const word& modelType,
             ReactionThermo& thermo,
@@ -86,21 +101,16 @@ public:
 
 
     //- Destructor
-    virtual ~eddyDissipationDiffusionModel();
+    virtual ~eddyDissipationModel();
 
 
     // Member Functions
 
-        // Evolution
+        //- Correct combustion rate
+        virtual void correct();
 
-            //- Correct combustion rate
-            virtual void correct();
-
-
-        // I-O
-
-            //- Update properties
-            virtual bool read();
+        //- Update properties
+        virtual bool read();
 };
 
 
@@ -113,7 +123,7 @@ public:
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 #ifdef NoRepository
-#   include "eddyDissipationDiffusionModel.C"
+    #include "eddyDissipationModel.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

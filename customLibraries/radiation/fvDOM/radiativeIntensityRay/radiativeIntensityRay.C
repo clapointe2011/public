@@ -20,6 +20,8 @@ License
 
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
+    
+    Adapted from original fvDOM code for use with AMR by Caelan Lapointe
 
 \*---------------------------------------------------------------------------*/
 
@@ -184,8 +186,7 @@ Foam::radiation::radiativeIntensityRay::radiativeIntensityRay
         IOobject IHeader
         (
             intensityPrefix + "_" + name(rayId) + "_" + name(lambdaI),
-            //mesh_.time().timeName(mesh_.time().startTime().value()),
-            mesh_.time().timeName(),
+            mesh_.time().timeName(mesh_.time().startTime().value()),
             mesh_,
             IOobject::MUST_READ,
             IOobject::AUTO_WRITE
@@ -212,8 +213,7 @@ Foam::radiation::radiativeIntensityRay::radiativeIntensityRay
                         IOobject
                         (
                             "IDefault",
-                            //mesh_.time().timeName(mesh_.time().startTime().value()),
-                            mesh_.time().timeName(),
+                            mesh_.time().timeName(mesh_.time().startTime().value()),
                             mesh_,
                             IOobject::MUST_READ,
                             IOobject::NO_WRITE

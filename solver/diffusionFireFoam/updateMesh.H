@@ -45,6 +45,13 @@
         //CL explicitly update gh/ghf
         gh = (g & mesh.C()) - ghRef;
         ghf = (g & mesh.Cf()) - ghRef;
+        
+        //CL update ph_rgh
+        if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
+        {
+            surfaceScalarField ph_rghSf = fvc::interpolate(ph_rgh);
+            ph_rgh = fvc::average(ph_rghSf);
+        }
 
         MRF.update();
                         

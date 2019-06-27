@@ -1,21 +1,5 @@
 if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
 {
-    volScalarField& ph_rgh = regIOobject::store
-    (
-        new volScalarField
-        (
-            IOobject
-            (
-                "ph_rgh",
-                "0",
-                mesh,
-                IOobject::MUST_READ,
-                IOobject::NO_WRITE
-            ),
-            mesh
-        )
-    );
-
     if (equal(runTime.value(), 0))
     {
         p = ph_rgh + rho*gh + pRef;
@@ -59,4 +43,13 @@ if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
 
         p_rgh = ph_rgh;
     }
+    /*else
+    {
+        volScalarField ph_rghStore = ph_rgh;
+        ph_rgh.clear();
+        surfaceScalarField ph_rghSfStore = fvc::interpolate(ph_rghStore);
+        ph_rgh = fvc::average(ph_rghSfStore);
+        ph_rgh.correctBoundaryConditions();
+        ph_rgh.write();
+    }*/
 }
