@@ -174,6 +174,15 @@ int main(int argc, char *argv[])
         rho = thermo.rho();
 
         runTime.write();
+        
+        if (runTime.writeTime() && pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
+        {
+            volScalarField ph_rghStore = ph_rgh;
+            ph_rgh.clear();
+            surfaceScalarField ph_rghSfStore = fvc::interpolate(ph_rghStore);
+            ph_rgh = fvc::average(ph_rghSfStore);
+            ph_rgh.write();
+        }
 
         Info<< "\nExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"

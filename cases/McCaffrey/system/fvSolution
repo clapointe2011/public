@@ -22,7 +22,7 @@ solvers
 	solver		diagonal;
     }
 
-    "(p_rgh|ph_rgh).*"
+    "(p_rgh|ph_rgh|pcorr).*"
     {
         solver          PCG;
         preconditioner
@@ -36,14 +36,6 @@ solvers
         relTol          0;
     }
     
-    "(pcorr|pcorr_0).*"
-    {
-        $p_rgh;
-        maxIter         1;
-        tolerance       1e-4;
-        relTol          0;
-    }
-
     "(U|h|Yi|k).*"
     {
         solver          PBiCGStab;

@@ -7,42 +7,15 @@
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    version         2.0;
-    format          ascii;
-    class           dictionary;
-    location        "system";
-    object          sample;
+    version     2.0;
+    format      ascii;
+    class       regIOobject;
+    location    "constant/polyMesh";
+    object      cellZones;
 }
-
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-type surfaces;
-libs            ("libsampling.so");
-
-interpolationScheme cellPoint;
-
-surfaceFormat           vtk;
-
-surfaces
-(
-    cuttingPlane
-    {
-        type         cuttingPlane;
-        planeType    pointAndNormal;
-        pointAndNormalDict
-        {
-            basePoint    (0 0 0.001);
-            normalVector (0 0 1);
-        }
-        interpolate  true;
-    }
-);
-
-fields
-(
-    T
-    U
-);
-
+0
+()
 
 // ************************************************************************* //

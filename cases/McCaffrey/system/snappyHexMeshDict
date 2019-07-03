@@ -30,8 +30,9 @@ geometry
 {
     inlet
     {
-        type triSurfaceMesh;
-        file "inlet.stl";
+        type searchablePlate;
+        origin (-0.15 0 -0.15);
+        span (0.15 0 0.15);
     }
 };
 

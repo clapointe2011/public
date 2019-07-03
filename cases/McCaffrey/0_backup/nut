@@ -28,12 +28,22 @@ boundaryField
 
     base
     {
-	    type		zeroGradient;
+	//type		inletOutlet;
+	//inletValue	$internalField;
+	//value		$internalField;
+
+	type		zeroGradient;
+
+        //type            fixedValue;
+        //value		uniform 0;
     }
 
     inlet
     {
-	    type		zeroGradient;
+	type		zeroGradient;
+
+        //type            fixedValue;
+        //value           uniform 0;
     }
 }
 

@@ -93,16 +93,18 @@ volScalarField ph_rgh
     IOobject
     (
         "ph_rgh",
-        runTime.timeName(),
+        "0",
         mesh,
         IOobject::MUST_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh
 );
 
-#include "phrghEqn.H"
-
+if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
+{
+    #include "phrghEqn.H"
+}
 
 multivariateSurfaceInterpolationScheme<scalar>::fieldTable fields;
 

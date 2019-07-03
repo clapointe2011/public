@@ -35,9 +35,12 @@ boundaryField
 
     inlet
     {
-	    type            fixedEnthalpyFluxTemperature;
-	    Tinf		    300;
-	    value		    $internalField;
+        //type            fixedValue;
+        //value           $internalField;
+
+	type            fixedEnthalpyFluxTemperature;
+	Tinf		300;
+	value		$internalField;
     }
 }
 

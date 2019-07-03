@@ -9,18 +9,15 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      fvOptions;
+    class       uniformDimensionedScalarField;
+    location    "constant/polyMesh";
+    object      level0Edge;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-limitT
-{
-    type       limitTemperature;
-    selectionMode all;
-    active     off;
-    min        300;
-    max        3000;
-}
+dimensions      [0 1 0 0 0 0 0];
+value           0.1;
 
-//************************************************************************** //
+
+
+// ************************************************************************* //

@@ -9,18 +9,13 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      fvOptions;
+    class       regIOobject;
+    location    "constant/polyMesh";
+    object      pointZones;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-limitT
-{
-    type       limitTemperature;
-    selectionMode all;
-    active     off;
-    min        300;
-    max        3000;
-}
+0
+()
 
-//************************************************************************** //
+// ************************************************************************* //
