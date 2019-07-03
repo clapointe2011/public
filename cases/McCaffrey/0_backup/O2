@@ -31,9 +31,6 @@ boundaryField
     base
     {
         type            zeroGradient;
-
-	//type		fixedValue;
-        //value		$internalField;
     }
 
     inlet
@@ -41,9 +38,6 @@ boundaryField
         type                totalFlowRateAdvectiveDiffusive;
         massFluxFraction    0;
         value               $internalField;
-
-        //type            fixedValue;
-        //value           uniform 0;
     }
 }
 
