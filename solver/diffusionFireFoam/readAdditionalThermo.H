@@ -18,7 +18,7 @@ License
     You should have received a copy of the GNU General Public License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 Global
-    readAdditionalThermo
+    readAdditionalThermo -- based on FMG fireFoam dev code
 Description
 \*---------------------------------------------------------------------------*/
 
@@ -33,31 +33,5 @@ volScalarField dEff
 (
     "dEff", turbulence->alphaEff()/(lewisNo + SMALL)
 );
-
-/*// moleculer mass diffusivity [m^2/s]
-dimensionedScalar DM
-(
-    "DM",
-     dimensionSet(0, 2, -1 , 0, 0),
-     0
-);
-volScalarField dEff
-(
-    "dEff",
-    turbulence->alphaEff()
-);
-const bool constDiffusivity(thermo.lookupOrDefault<bool>("constDiffusivity", false));
-if (constDiffusivity)
-{
-    DM = dimensionedScalar(thermo.lookup("DM"));
-    Info<< "Mass species diffusivity: " << DM  << "\n" << nl;
-}
-else
-{
-    if (lewisNo!=1) 
-    {
-        Info<< "Lewis number: " << lewisNo  << "\n" << nl;
-    }
-}*/
 
 // ************************************************************************* //

@@ -16,15 +16,6 @@ tmp<fv::convectionScheme<scalar>> mvConvection
     
     dEff = turbulence->alphaEff()/(lewisNo + SMALL);
 
-    /*if (constDiffusivity)
-    {
-        dEff = dEff - turbulence->alpha() + DM*rho;
-    }
-    else
-    {
-        dEff -= turbulence->alphaEff()*(1-1.0/lewisNo);
-    }*/
-
     forAll(Y, i)
     {
         if (i != inertIndex && composition.active(i))
@@ -64,7 +55,6 @@ tmp<fv::convectionScheme<scalar>> mvConvection
         fvm::ddt(rho, h) + mvConvection->fvmDiv(phi, h)
       + fvc::ddt(rho, K) + fvc::div(phi, K)
       - fvm::laplacian(turbulence->alphaEff(), h)
-      //- fvm::laplacian(h*(dEff-turbulence->alphaEff())*Yt, Yt) // from https://www.cfd-online.com/Forums/openfoam-programming-development/113264-including-enthalpy-transport.html
       - dpdt
      ==
         Qdot

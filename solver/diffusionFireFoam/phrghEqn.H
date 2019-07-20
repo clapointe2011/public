@@ -1,4 +1,3 @@
-if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
 {
     if (equal(runTime.value(), 0))
     {

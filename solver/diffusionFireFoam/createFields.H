@@ -88,14 +88,16 @@ volScalarField p_rgh
 
 mesh.setFluxRequired(p_rgh.name());
 
+
+
 volScalarField ph_rgh
 (
     IOobject
     (
         "ph_rgh",
-        "0",
+        runTime.timeName(),
         mesh,
-        IOobject::MUST_READ,
+        IOobject::NO_READ,
         IOobject::NO_WRITE
     ),
     mesh
@@ -103,6 +105,8 @@ volScalarField ph_rgh
 
 if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
 {
+    ph_rgh.readOpt() = IOobject::MUST_READ;
+    ph_rgh.writeOpt() = IOobject::AUTO_WRITE;
     #include "phrghEqn.H"
 }
 
