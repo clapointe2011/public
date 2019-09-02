@@ -1,0 +1,1 @@
+../turbulentTemperatureRadCoupledMixedDamped/turbulentTemperatureRadCoupledMixedDampedFvPatchScalarField.H

@@ -1,0 +1,1 @@
+../fixedIncidentRadiationCoupledMixed/fixedIncidentRadiationCoupledMixedFvPatchScalarField.H

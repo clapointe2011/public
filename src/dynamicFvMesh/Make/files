@@ -1,0 +1,7 @@
+dynamicRefineMotionSolverFvMesh/dynamicRefineMotionSolverFvMesh.C
+dynamicRefineMotionSolverFvMesh2D/dynamicRefineMotionSolverFvMesh2D.C
+dynamicRefineFvMesh/dynamicRefineFvMesh.C
+dynamicRefineFvMesh2D/dynamicRefineFvMesh2D.C
+dynamicRefineBalancedFvMesh/dynamicRefineBalancedFvMesh.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyDynamicFvMesh
