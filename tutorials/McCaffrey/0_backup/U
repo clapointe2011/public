@@ -1,0 +1,64 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+
+    outlet
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+
+	//type		inletOutlet;
+	//inletValue	uniform (0 0 0);
+	//value		uniform (0 0 0);
+    }
+
+    sides
+    {
+        type            pressureInletOutletVelocity;
+        value           uniform (0 0 0);
+    }
+
+    base
+    {
+        //type            pressureInletOutletVelocity;
+        //value           uniform (0 0 0);
+
+        type            noSlip;
+    }
+
+    inlet
+    {
+        type            flowRateInletVelocity;
+        massFlowRate    constant 0.00115 //57.5 kW, using 5e4 kJ/kg HOC for methane
+        rhoInlet        0.66;    // fallback value for e.g. potentialFoam
+	//extrapolateProfile true;
+        value           uniform (0 0 0);
+
+	//type		fixedValue;
+        //value		uniform (0 0.0194 0);
+    }
+}
+
+
+// ************************************************************************* //

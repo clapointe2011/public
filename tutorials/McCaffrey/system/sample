@@ -1,0 +1,72 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+        libs ("libsampling.so");
+        
+        type                    sets;
+        writeControl            outputTime;
+        writeInterval           1;
+        setFormat               raw;
+        interpolationScheme     cellPoint;
+
+        fields
+        (
+	    U
+            T
+        );
+        
+        sets
+        (
+            centerLine
+            {
+                type            lineUniform;
+                axis            y;
+                start           (0 0 0);
+                end             (0 3 0);
+                nPoints         150;
+            }
+            
+            d0.5
+            {
+                type            lineUniform;
+                axis            x;
+                start           (-0.3 0.15 0);
+                end             (0.3 0.15 0);
+                nPoints         30;
+            }
+            
+            d1
+            {
+                type            lineUniform;
+                axis            x;
+                start           (-0.3 0.3 0);
+                end             (0.3 0.3 0);
+                nPoints         30;
+            }
+            
+            d2
+            {
+                type            lineUniform;
+                axis            x;
+                start           (-0.3 0.6 0);
+                end             (0.3 0.6 0);
+                nPoints         30;
+            }
+        );
+}
+
+
+// ************************************************************************* //

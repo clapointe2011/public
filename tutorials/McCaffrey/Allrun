@@ -1,0 +1,23 @@
+#!/bin/bash
+
+cp -rf 0_backup 0
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+# Set application name
+application=diffusionFireFoam
+
+echo "building mesh"
+
+runApplication blockMesh
+runApplication snappyHexMesh -overwrite
+runApplication decomposePar -force
+
+mkdir runFiles
+mv log* runFiles
+
+echo "running solver"
+runParallel $application
+
+#------------------------------------------------------------------------------
