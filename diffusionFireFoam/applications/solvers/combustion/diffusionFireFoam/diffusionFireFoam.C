@@ -137,40 +137,6 @@ int main(int argc, char *argv[])
             #include "updateMesh.H"
         }
         
-        autoPtr<surfaceScalarField> UBlendingFactor;
-        if (localBlendedU)
-        {
-            volScalarField level
-            (
-                IOobject
-                (
-                    "level",
-                    runTime.timeName(),
-                    mesh,
-                    IOobject::NO_READ,
-                    IOobject::AUTO_WRITE
-                ),
-                mesh,
-                dimensionedScalar("tmp", dimless, 1.0),
-                zeroGradientFvPatchScalarField::typeName
-            );
-
-            labelList cellLevel = mesh.lookupObject<labelIOList>("cellLevel");
-
-            forAll(level, celli)
-            {
-                level[celli] = cellLevel[celli];
-            }
-
-            level /= max(level);
-
-            UBlendingFactor = new surfaceScalarField
-            (
-                "UBlendingFactor",
-                fvc::interpolate(level)
-            );
-        }
-        
         if (LTS)
         {
             #include "setRDeltaT.H"
