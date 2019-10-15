@@ -1,0 +1,9 @@
+Public repository for OpenFOAM development by Caelan Lapointe, Peter Hamlington, and co-authors.
+
+Currently includes :
+
+diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases discussed in the publication
+
+Disclaimer :
+
+This offering is not approved or endorsed by OpenCFD Limited, producer and distributor of the OpenFOAM software via www.openfoam.com, and owner of the OPENFOAM®  and OpenCFD®  trade marks.”
