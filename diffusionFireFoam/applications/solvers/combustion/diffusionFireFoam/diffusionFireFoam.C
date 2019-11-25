@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
         }
         
         autoPtr<volScalarField> divrhoU_0_0;
-        if (correctPhi && ddtSchemeName == "backward")
+        if (correctPhi && ddtSchemeName != "Euler")
         {
             divrhoU_0_0 = new volScalarField
             (
@@ -133,8 +133,26 @@ int main(int argc, char *argv[])
         }
         
         if ((runTime.timeIndex() - startRunIndex) > startDyMIndex)
-        {
+	{
+            if (monitorConservation)
+            {
+                Info << "Mass before update : " << fvc::domainIntegrate(rho).value()<< endl;
+                Info << "MomentumX before update : " << fvc::domainIntegrate(rho*U.component(0)).value() << endl;
+                Info << "MomentumY before update : " << fvc::domainIntegrate(rho*U.component(1)).value() << endl;
+                Info << "MomentumZ before update : " << fvc::domainIntegrate(rho*U.component(2)).value() << endl;
+                Info << "Enthalpy before update : " << fvc::domainIntegrate(thermo.he()).value() << endl;
+            }
+
             #include "updateMesh.H"
+
+            if (monitorConservation)
+            {
+                Info << "Mass after update : " << fvc::domainIntegrate(rho).value() << endl;
+                Info << "MomentumX after update : " << fvc::domainIntegrate(rho*U.component(0)).value() << endl;
+                Info << "MomentumY after update : " << fvc::domainIntegrate(rho*U.component(1)).value() << endl;
+                Info << "MomentumZ after update : " << fvc::domainIntegrate(rho*U.component(2)).value() << endl;
+                Info << "Enthalpy after update : " << fvc::domainIntegrate(thermo.he()).value() << endl;
+            }
         }
         
         if (LTS)

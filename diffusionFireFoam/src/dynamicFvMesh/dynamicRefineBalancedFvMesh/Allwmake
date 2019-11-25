@@ -1,9 +1,0 @@
-#!/bin/sh
-cd ${0%/*} || exit 1    # Run from this directory
-
-wmake
-
-#------------------------------------------------------------------------------
-# Allows dynamic load balancing when working with dynamic meshes (not very
-# stable yet...)
-#------------------------------------------------------------------------------

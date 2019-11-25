@@ -1,3 +1,0 @@
-hexRef2D/hexRef2D.C
-
-LIB = $(FOAM_USER_LIBBIN)/libmyDynamicMesh
