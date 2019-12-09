@@ -1,3 +1,4 @@
+
 {
     scalar timeBeforeMeshUpdate = runTime.elapsedCpuTime();
                     
@@ -25,7 +26,7 @@
     // Make the fluxes absolute
     fvc::makeAbsolute(phi, rho, U);
     fvc::makeAbsolute(phi.oldTime(), rho.oldTime(), U.oldTime());
-    if (ddtSchemeName == "backward")
+    if (ddtSchemeName != "Euler")
     {
         fvc::makeAbsolute(phi.oldTime().oldTime(), rho.oldTime().oldTime(), U.oldTime().oldTime());
     }
@@ -33,7 +34,7 @@
     // Store momentum to set phi/phi_0 for introduced faces.
     rhoU() = rho*U;
     rhoU_0() = rho.oldTime()*U.oldTime();
-    if (ddtSchemeName == "backward")
+    if (ddtSchemeName != "Euler")
     {
         rhoU_0_0() = rho.oldTime().oldTime()*U.oldTime().oldTime();
     }
@@ -42,11 +43,11 @@
 
     if (mesh.changing())
     {                   
-        //CL explicitly update gh/ghf
+        //explicitly update gh/ghf
         gh = (g & mesh.C()) - ghRef;
         ghf = (g & mesh.Cf()) - ghRef;
         
-        //CL update ph_rgh
+        //update ph_rgh for restarts
         if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
         {
             surfaceScalarField ph_rghf = fvc::interpolate(ph_rgh);
@@ -59,10 +60,10 @@
                         
         if (correctPhi)
         {
-            //CL explicitly update phi/phi_0/phi_0_0
+            //explicitly update phi/phi_0/phi_0_0
             phi = mesh.Sf() & fvc::interpolate(rhoU());
             phi.oldTime() = mesh.Sf() & fvc::interpolate(rhoU_0());
-            if (ddtSchemeName == "backward")
+            if (ddtSchemeName != "Euler")
             {
                 phi.oldTime().oldTime() = mesh.Sf() & fvc::interpolate(rhoU_0_0());
             }
@@ -72,7 +73,7 @@
             // Make the fluxes relative to the mesh motion
             fvc::makeRelative(phi, rho, U);
             fvc::makeRelative(phi.oldTime(), rho.oldTime(), U.oldTime());
-            if (ddtSchemeName == "backward")
+            if (ddtSchemeName != "Euler")
             {
                 fvc::makeRelative(phi.oldTime().oldTime(), rho.oldTime().oldTime(), U.oldTime().oldTime());
             }

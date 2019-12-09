@@ -27,10 +27,6 @@ boundaryField
         type            pressureInletOutletVelocity;
         tangentialVelocity uniform (0 0 0);
         value           uniform (0 0 0);
-
-	//type		inletOutlet;
-	//inletValue	uniform (0 0 0);
-	//value		uniform (0 0 0);
     }
 
     sides
@@ -52,11 +48,7 @@ boundaryField
         type            flowRateInletVelocity;
         massFlowRate    constant 0.00115 //57.5 kW, using 5e4 kJ/kg HOC for methane
         rhoInlet        0.66;    // fallback value for e.g. potentialFoam
-	//extrapolateProfile true;
         value           uniform (0 0 0);
-
-	//type		fixedValue;
-        //value		uniform (0 0.0194 0);
     }
 }
 

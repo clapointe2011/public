@@ -51,7 +51,6 @@
     
     dimensionedScalar rAUf("rAUf", dimTime, 1.0);
 
-    //CL flux corrections
     for (int i = 0; i<nCorrPhi; i++)
     {
         // Solve for pcorr such that the divergence of the corrected flux
@@ -75,7 +74,7 @@
         }
         
         // Solve for pcorr such that the divergence of the corrected flux
-        // matches the divRhoU provided (from previous iteration, time-step...)
+        // matches the divRhoU_0 provided (from previous iteration, time-step...)
         fvScalarMatrix pcorrEqn_0
         (
             fvc::div(phi.oldTime())
@@ -95,7 +94,7 @@
         }
     }
     
-    if (ddtSchemeName == "backward")
+    if (ddtSchemeName != "Euler")
     {
         correctUphiBCs(rho.oldTime().oldTime(), U.oldTime().oldTime(), phi.oldTime().oldTime());
         
@@ -117,7 +116,7 @@
         for (int i = 0; i<nCorrPhi; i++)
         {   
             // Solve for pcorr such that the divergence of the corrected flux
-            // matches the divRhoU provided (from previous iteration, time-step...)
+            // matches the divRhoU_0_0  provided (from previous iteration, time-step...)
             fvScalarMatrix pcorrEqn_0_0
             (
                 fvc::div(phi.oldTime().oldTime())

@@ -23,14 +23,6 @@ boundaryField
 {
     outlet
     {
-        //type            waveTransmissive;
-        //field           p_rgh;
-        //psi             thermo:psi;
-        //gamma           1.4;
-        //fieldInf        0;
-        //lInf            10;
-        //value           $internalField;
-    
         type            prghTotalHydrostaticPressure;
         p0              $internalField;
         gamma           1.4;
@@ -47,11 +39,6 @@ boundaryField
 
     base
     {
-        //type            prghTotalHydrostaticPressure;
-        //p0              $internalField;
-        //gamma           1.4;
-        //value           $internalField;
-
         type            fixedFluxPressure;
         value           $internalField;
     }

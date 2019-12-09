@@ -31,9 +31,6 @@ boundaryField
     base
     {
 	type		zeroGradient;
-
-        //type            fixedValue;
-        //value           $internalField;
     }
 
     inlet

@@ -38,9 +38,6 @@ boundaryField
         type                totalFlowRateAdvectiveDiffusive;
         massFluxFraction    1.0;
         value               $internalField;
-
-	//type		fixedValue;
-        //value		uniform 1;
     }
 }
 
