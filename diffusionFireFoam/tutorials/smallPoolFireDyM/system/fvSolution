@@ -46,17 +46,12 @@ solvers
     
     "Ii.*"
     {
-        solver          PBiCGStab;
-        preconditioner
-        {
-            preconditioner  GAMG;
-            smoother        DILUGaussSeidel;
-            tolerance       1e-4;
-            relTol          0;
-        }
-        tolerance       1e-4;
-        relTol          0;
-        maxIter         1;
+        solver              GAMG;
+        smoother            symGaussSeidel;
+        maxIter             10;
+        nPostSweeps         1;
+        tolerance           1e-4;
+        relTol              0;
     }
 
     "G.*"
