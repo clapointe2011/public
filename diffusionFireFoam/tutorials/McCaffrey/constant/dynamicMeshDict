@@ -41,13 +41,6 @@ dynamicRefineFvMeshCoeffs
         unrefineLevel       0.33;
     }
 
-    varRho
-    {
-        lowerRefineLevel    0.33;
-        upperRefineLevel    1;
-        unrefineLevel       0.33;
-    }
-    
     sQ
     {
         lowerRefineLevel    0.001;

@@ -23,7 +23,7 @@ dynamicRefineFvMeshCoeffs
     refineInterval 1;
 
     // Field to be refinement on
-    fields        (sQ sVort);
+    fields        (CH4 sQ sVort);
     
     //Refinement field dictionaries 
     CH4
