@@ -13,9 +13,8 @@ EXE_INC = \
     -I$(LIB_SRC)/combustionModels/lnInclude \
     -I$(LIB_SRC)/dynamicMesh/lnInclude \
     -I$(LIB_SRC)/dynamicFvMesh/lnInclude \
-    -I../../../../src/dynamicMesh/lnInclude \
     -I../../../../src/dynamicFvMesh/lnInclude \
-    -I../../../../src/radiationModels/lnInclude \
+    -I../../../../src/thermophysicalModels/radiationModels/lnInclude \
 
 EXE_LIBS = \
     -L$(FOAM_USER_LIBBIN) \
@@ -30,6 +29,7 @@ EXE_LIBS = \
     -lmyRadiationModels \
     -lmyDynamicMesh \
     -lmyDynamicFvMesh \
+    -lcustomFvPatchFields \
     -lcompressibleTransportModels \
     -lfluidThermophysicalModels \
     -lchemistryModel \

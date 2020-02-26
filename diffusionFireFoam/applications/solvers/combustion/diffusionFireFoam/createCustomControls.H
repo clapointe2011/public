@@ -1,5 +1,7 @@
 bool correctPhi(pimple.dict().lookupOrDefault<Switch>("correctPhi", true));
 
+bool monitorConservation(pimple.dict().lookupOrDefault<Switch>("monitorConservation", true));
+
 scalar nCorrPhi(pimple.dict().lookupOrDefault<scalar>("nCorrPhi",1));
 
 scalar startDyMIndex(pimple.dict().lookupOrDefault<scalar>("startDyMIndex",0));

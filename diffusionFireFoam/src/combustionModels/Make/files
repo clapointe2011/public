@@ -1,5 +1,3 @@
-eddyDissipationModel/eddyDissipationModels.C
 eddyDissipationDiffusionModel/eddyDissipationDiffusionModels.C
-multiEDM/multiEDMs.C
 
 LIB = $(FOAM_USER_LIBBIN)/libmyCombustionModels
