@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+#-----------------------------------------------------------------------------
+
+
+# Translate the baffle1 to the origin
+#-----------------------------------------------------------------------------
+surfaceTransformPoints -translate "(-0.125 -0.075 0)" \
+    constant/triSurface/baffle1_original.stl baffle.stl
+
+
+# Rotate the baffle1 (parameter)
+#-----------------------------------------------------------------------------
+surfaceTransformPoints -yawPitchRoll "(angle1 0 0)" baffle.stl baffle.stl
+
+
+# Translate back to the original position but a bit lower and more
+# to the right (this is just for a better case)
+#-----------------------------------------------------------------------------
+surfaceTransformPoints -translate "(0.132 0.055 0)" \
+    baffle.stl constant/triSurface/baffle1.stl
+
+
+# Remove not needed files
+#-----------------------------------------------------------------------------
+rm -f baffle.stl
+
+
+# Translate the baffle2 to the origin
+#-----------------------------------------------------------------------------
+surfaceTransformPoints -translate "(-0.06 -0.01 0)" \
+    constant/triSurface/baffle2_original.stl baffle.stl
+
+
+# Rotate the baffle2 (parameter)
+#-----------------------------------------------------------------------------
+surfaceTransformPoints -yawPitchRoll "(angle2 0 0)" baffle.stl baffle.stl
+
+
+# Translate back to the original position but a bit higher
+#-----------------------------------------------------------------------------
+surfaceTransformPoints -translate "(0.06 0.015 0)" \
+    baffle.stl constant/triSurface/baffle2.stl
+
+
+# Remove not needed files
+#-----------------------------------------------------------------------------
+rm -f baffle.stl
+
+
+#-----------------------------------------------------------------------------

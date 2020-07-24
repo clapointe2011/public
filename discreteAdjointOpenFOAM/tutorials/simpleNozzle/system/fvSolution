@@ -1,0 +1,203 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "(rho|rhoFinal)"
+    {
+        solver          diagonal;
+        adjointLinearSolverTreatment no;
+    }
+    
+    "(U|UReverse)"
+    {
+        solver          smoothSolver;
+        nSweeps         2;
+        tolerance       1e-10;
+        relTol          0;
+        smoother	    GaussSeidel;
+        adjointLinearSolverTreatment yes;
+    }
+
+    UFinal
+    {
+        $U;
+        relTol 0;
+        adjointLinearSolverTreatment yes;
+    }
+    
+    "(p|pReverse)"
+    {
+    
+        solver          GAMG;
+	    preconditioner  DILU;
+	    tolerance       1e-10;
+	    relTol          0;
+	    smoother        GaussSeidel;
+	    nPreSweeps      2;
+	    nPostSweeps     2;
+	    nFinestSweeps   2;
+	    cacheAgglomeration true;
+	    nCellsInCoarsestLevel 20;
+	    agglomerator    faceAreaPair;
+	    mergeLevels     1;
+	    adjointLinearSolverTreatment yes;
+    }
+    
+    pFinal
+    {
+        $p;
+        relTol 0;
+        adjointLinearSolverTreatment yes;
+    }
+
+    "(h|hReverse)"
+    {
+        solver          smoothSolver;
+        nSweeps         2;
+        tolerance       1e-10;
+        relTol          0;
+        smoother	    GaussSeidel;
+        adjointLinearSolverTreatment yes;
+    }
+    
+    hFinal
+    {
+        $h;
+        relTol 0;
+        adjointLinearSolverTreatment yes;
+    }
+
+    "(k|omega|nuTilda|epsilon)"
+    {
+        solver          smoothSolver;
+        nSweeps         2;
+        tolerance       1e-10;
+        relTol          0;
+        smoother	    GaussSeidel;
+        adjointLinearSolverTreatment yes;
+    }
+    
+    "(k|omega|nuTilda|epsilon)Final"
+    {
+        $k
+        relTol 0;
+        adjointLinearSolverTreatment yes;
+    }
+
+    "(k|omega|nuTilda|epsilon)Reverse"
+    {
+        $k
+        relTol 0;
+        adjointLinearSolverTreatment yes;
+    }
+    
+    Yi
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-10;
+        relTol          0;
+        smoother        GaussSeidel;
+        adjointLinearSolverTreatment no;
+    }
+    
+    YiFinal
+    {
+        $Yi;
+        relTol 0;
+        adjointLinearSolverTreatment no;
+    }
+
+    "(CO2|H2O|N2|O2|CH4)Reverse"
+    {
+        $Yi;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor	        true;
+    turbOnFinalIterOnly         false;
+    nOuterCorrectors            3;
+    nCorrectors                 2;
+    nNonOrthogonalCorrectors    0;
+    nonOrthogonalityThreshold   60.0;
+    skewnessThreshold		    1.0;
+
+    maxCo			            1;
+    maxDeltaT			        1;
+    rDeltaTSmoothingCoeff	    1;
+    rDeltaTDampingCoeff		    1;
+    alphaTemp			        1;
+}
+
+OPTIMIZATION
+{
+    //cost function options
+    costFunction "reacSonicTotalPressure";
+    costFunctionPatches (outlet);
+
+    //general options
+    frozenTurbulence false;
+    passiveInitialization true;
+    passiveFinalization true;
+    cumulativeSolution true;
+    fromSteady false;
+    writeOptFields true;
+    writeOptInt 1;
+    PRweight 1;
+
+    //material addition options
+    limitMinAlpha true;
+    MAfactor 0.1;
+    smoothAlpha true;
+    smoothFreq 10;
+    SAfactor 0.1;
+    SAweight 0.9;
+    binaryAlpha true;
+    buildFrom true;
+    proximityNeighbor true;
+    scaleByVol true;
+
+    // convergence tolerance
+    relTol		1e-3;
+
+    // passive cutoff parameters
+    initCutoff		2.5e3;
+    finalCutoff		1e3;
+
+    // number of active iterations
+    tapedIter		3;
+
+    // number of optimization iterations
+    optEndIter		1e2;
+
+    // constants for shape optimization
+    lambda	lambda [0 -2 1 0 0 0 0] 1e13;
+    alphaMax	alphaMax [0 0 -1 0 0 0 0] 1e10;
+}
+
+relaxationFactors
+{
+    fields
+    {
+	    alpha 1;
+    }
+}
+
+// ************************************************************************* //

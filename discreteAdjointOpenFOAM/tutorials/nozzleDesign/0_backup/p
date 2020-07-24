@@ -1,0 +1,87 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions              [1 -1 -2 0 0 0 0];
+
+internalField           uniform 1000000;
+
+boundaryField
+{
+    outlet
+    {
+        //type          fixedFluxPressure;
+        //value         $internalField;
+
+        //type          totalPressure;
+        //p0            $internalField;
+        //U             U;
+        //phi           phi;
+        //rho           rho;
+        //psi           none;
+        //gamma         0;
+        //value         $internalField;
+
+	    type		    zeroGradient;
+
+        //type        fixedValue;
+        //value       uniform 100000;
+    }
+
+    inlet
+    {
+	    //type		    fixedFluxPressure;
+	    //value		    $internalField;
+
+        //type            totalPressure;
+        //p0              uniform 100000;
+        //U               U;
+        //phi             phi;
+        //psi		        thermo:psi;
+        //gamma           1.4;
+        //value           uniform 100000;
+
+	    type		    fixedValue;
+	    value		    uniform 1000000;
+    }
+
+    "(fuelInlet|fuelInlet1)"
+    {
+	    //type		    fixedFluxPressure;
+	    //value		    $internalField;
+
+	    type		    zeroGradient;
+    }
+
+    "(upperWall|upperWall2)"
+    {
+        type            symmetryPlane;
+    }
+
+    "(lowerWall|lowerWall2)"
+    {
+        //type      fixedFluxPressure;
+	    //value		$internalField;
+
+	    type		zeroGradient;
+    }
+
+    frontAndBack
+    {
+        type            empty;
+    }
+}
+
+// ************************************************************************* //

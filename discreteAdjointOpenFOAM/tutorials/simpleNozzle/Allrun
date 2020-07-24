@@ -1,0 +1,34 @@
+#! /bin/bash
+cp -rf 0_backup 0
+
+mkdir runFiles
+
+echo "creating mesh"
+blockMesh > log.blockMesh
+mirrorMesh -overwrite > log.mirrorMesh
+#topoSet -dict system/topoSetDict > log.topoSet
+#createPatch -overwrite -dict system/createPatchDict > log.createPatch
+#topoSet -dict system/topoSetDict1 > log.topoSet1
+#createPatch -overwrite -dict system/createPatchDict1 > log.createPatch1
+renumberMesh -overwrite > log.renumberMesh
+
+#mapFields -consistent ../backwardStepDoubleInjectedLSKE -sourceTime 5000 > log.mapFields
+#mapFields -consistent ../backwardStepDoubleInjectedkOmegaSST -sourceTime 3000 > log.mapFields
+
+#cp constant/reactionsArr constant/reactions
+cp constant/reactionsInf constant/reactions
+
+mv log* runFiles
+
+echo "running solver"
+#rhoPisoCentralFoam > log.rhoPisoCentralFoam
+#reactingRhoPisoCentralFoam > log.reactingRhoPisoCentralFoam
+#adjointReactingRhoPisoCentralFoam > log.adjointReactingRhoPisoCentralFoam
+#reactingRhoPimpleCentralFoam > log.reactingRhoPimpleCentralFoam
+adjointReactingRhoPimpleCentralFoam > log.adjointReactingRhoPimpleCentralFoam
+
+mv log* runFiles
+
+#cat runFiles/log.adjointFireFoamLTS | grep 'new cost function value : ' | cut -d' ' -f6 | tr -d ',' > J.xy
+
+#mv J.xy runFiles

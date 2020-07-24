@@ -1,0 +1,29 @@
+#! /bin/bash
+
+cp -rf 0_backup 0
+
+mkdir runFiles
+
+echo "creating mesh"
+blockMesh > log.blockMesh
+
+#mirrorMesh > log.mirrorMesh
+
+#setFields > log.setFields
+renumberMesh -overwrite > log.renumberMesh
+
+#cp constant/reactionsArr constant/reactions
+#cp constant/reactionsInf constant/reactions
+
+mv log* runFiles
+
+echo "running solver"
+
+#reactingRhoPimpleCentralFoam > log.reactingRhoPimpleCentralFoam
+adjointReactingRhoPimpleCentralFoam > log.adjointReactingRhoPimpleCentralFoam
+
+mv log* runFiles
+
+#cat runFiles/log.adjointFireFoamLTS | grep 'new cost function value : ' | cut -d' ' -f6 | tr -d ',' > J.xy
+
+#mv J.xy runFiles
