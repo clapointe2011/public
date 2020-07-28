@@ -2,9 +2,11 @@ Public repository for OpenFOAM development by Caelan Lapointe, Peter Hamlington,
 
 Currently includes :
 
-diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases discussed in the publication developed for of-dev (between of6 and of7). Relevant publication : https://doi.org/10.1016/j.firesaf.2019.102934
+diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases discussed in the publication developed for of-dev (between of6 and of7).
+Relevant publication : https://doi.org/10.1016/j.firesaf.2019.102934
 
-adjointRhoReactingCentralFoam, for topology optimization of reacting, compresisble flows. Relevant publication : https://doi.org/10.2514/6.2017-4115
+adjointRhoReactingCentralFoam, for topology optimization of reacting, compresisble flows.
+Relevant publication : https://doi.org/10.2514/6.2017-4115
 
 Disclaimer :
 
