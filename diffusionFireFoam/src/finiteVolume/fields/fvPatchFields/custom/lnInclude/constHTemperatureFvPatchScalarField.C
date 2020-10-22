@@ -1,1 +1,0 @@
-../constHTemperature/constHTemperatureFvPatchScalarField.C

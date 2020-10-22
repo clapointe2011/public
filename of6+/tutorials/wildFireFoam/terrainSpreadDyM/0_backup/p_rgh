@@ -1,0 +1,87 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      p_rgh;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    inlet
+    {
+        type            fixedFluxPressure;
+        value           $internalField;
+    }
+    
+    top
+    {
+        //type            waveTransmissive;
+        //field           p_rgh;
+        //psi             thermo:psi;
+        //gamma           1.4;
+        //fieldInf        0;
+        //lInf            50;
+        //value           $internalField;
+        
+        //type            prghTotalHydrostaticPressure;
+        //value           $internalField;
+    
+        type            zeroGradient;
+   
+    }
+    
+    outlet
+    {
+        type            waveTransmissive;
+        field           p_rgh;
+        psi             thermo:psi;
+        gamma           1.4;
+        //fieldInf        0;
+        //lInf            5;
+        value           $internalField;
+        
+        //type            prghTotalHydrostaticPressure;
+        //value           $internalField;
+    }
+
+    sides
+    {
+        type            prghTotalHydrostaticPressure;
+        value           $internalField;
+    }
+
+    base
+    {
+        type            fixedFluxPressure;
+        value           $internalField;
+    }
+
+    burner
+    {
+        type            fixedFluxPressure;
+        value           $internalField;
+    }
+
+    "(region0_to.*)"
+    {
+        type            fixedFluxPressure;
+        value           $internalField;
+    }
+}
+
+
+// ************************************************************************* //

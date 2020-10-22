@@ -1,0 +1,113 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 300;
+
+boundaryField
+{
+    "(sides|outlet)"
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+   
+    top
+    {
+        type            zeroGradient;
+    }
+
+    inlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+    
+    base
+    {
+        type            zeroGradient;
+    }
+    
+    burner
+    {
+        type            fixedValue;
+        value           $internalField;
+
+        //type            fixedEnthalpyFluxTemperature;
+        //Tinf            300;
+        //value           $internalField;
+    }
+
+    region0_to_pyrolysisRegion_woodZone //name of coupled patch
+    {
+        type            compressible::turbulentTemperatureRadCoupledMixed;
+        Tnbr            T;
+        kappaMethod     fluidThermo;
+        qrNbr           none;
+        qr              qr;
+        value           $internalField;
+        
+        /*type          compressible::turbulentTemperatureRadiationQinCoupledMixed;
+        neighbourFieldName T;
+        kappaMethod     fluidThermo;
+        kappaName       none;
+        emissivityMode  solidRadiation;
+        neighbourFieldRadiativeName none;
+        value           $internalField;*/
+        
+        /*type          compressible::fixedIncidentRadiationCoupledMixed;
+        neighbourFieldName T;
+        K               none;
+        neighbourFieldRadiativeName none;
+        fieldRadiativeName qr;
+        QrIncident      0;
+        emissivityMode  solidRadiation;
+        value           $internalField;*/
+    }
+    
+    region0_to_pyrolysisRegion_heatedWoodZone //name of coupled patch
+    {
+        type            compressible::turbulentTemperatureRadCoupledMixed;
+        Tnbr            T;
+        kappaMethod     fluidThermo;
+        qrNbr           none;
+        qr              qr;
+        value           300;
+        
+        //type          compressible::turbulentTemperatureRadiationQinCoupledMixed;
+        //neighbourFieldName T;
+        //kappaMethod     fluidThermo;
+        //kappaName       none;
+        //emissivityMode  solidRadiation;
+        //neighbourFieldRadiativeName none;
+        //value           $internalField;
+        
+        /*type          compressible::fixedIncidentRadiationCoupledMixed;
+        neighbourFieldName T;
+        K               none;
+        neighbourFieldRadiativeName none;
+        fieldRadiativeName qr;
+        QrIncident      100000;
+        emissivityMode  solidRadiation;
+        value           $internalField;*/
+    }
+}
+
+
+// ************************************************************************* //

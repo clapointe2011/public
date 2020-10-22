@@ -1,1 +1,0 @@
-../nutFireWallFunction/nutFireWallFunctionFvPatchScalarField.C

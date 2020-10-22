@@ -1,0 +1,87 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 300;
+
+boundaryField
+{
+
+    ".*"
+    {
+        type            zeroGradient;
+    }
+    
+    region0_to_pyrolysisRegion_woodZone
+    {
+        type            compressible::turbulentTemperatureRadCoupledMixed;
+        Tnbr            T;
+        kappaMethod     solidThermo;
+        qrNbr           qr;
+        qr              none;
+        value           300;
+        
+        /*type          compressible::turbulentTemperatureRadiationQinCoupledMixed;
+        neighbourFieldName T;
+        kappaMethod     solidThermo;
+        kappaName       none;
+        neighbourFieldRadiativeName qr;
+        emissivityMode  solidRadiation;
+        value           $internalField;*/
+        
+        /*type          compressible::fixedIncidentRadiationCoupledMixed;
+        neighbourFieldName T;
+        K               solidThermo;
+        neighbourFieldRadiativeName qr;
+        fieldRadiativeName none;
+        QrIncident      0; //W
+        emissivityMode solidRadiation;
+        value           $internalField;*/
+    }
+    
+    region0_to_pyrolysisRegion_heatedWoodZone
+    {
+        type            compressible::turbulentTemperatureRadCoupledMixed;
+        Tnbr            T;
+        kappaMethod     solidThermo;
+        qrNbr           none;
+        qr              none;
+        value           300;
+        
+        //type          compressible::turbulentTemperatureRadiationQinCoupledMixed;
+        //neighbourFieldName T;
+        //kappaMethod     solidThermo;
+        //kappaName       none;
+        //neighbourFieldRadiativeName qr;
+        //emissivityMode  solidRadiation;
+        //value           $internalField;
+        
+        /*type          compressible::fixedIncidentRadiationCoupledMixed;
+        neighbourFieldName T;
+        K               solidThermo;
+        neighbourFieldRadiativeName qr;
+        fieldRadiativeName none;
+        QrIncident      100000; //W
+        emissivityMode solidRadiation;
+        value           $internalField;*/
+    }
+
+}
+
+
+// ************************************************************************* //

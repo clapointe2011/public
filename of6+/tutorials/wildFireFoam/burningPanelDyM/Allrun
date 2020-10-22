@@ -1,0 +1,29 @@
+#!/bin/bash
+
+cp -rf 0_backup 0
+
+mkdir runLogs
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+runApplication blockMesh
+
+runApplication snappyHexMesh -overwrite
+
+runApplication -s f \
+    topoSet -dict system/f.topoSetDict
+
+# create the pyrolysis region.
+runApplication extrudeToRegionMesh -overwrite
+
+runApplication -s fBurner \
+    topoSet -dict system/fBurner.topoSetDict
+
+runApplication createPatch -overwrite
+
+mv log.* runLogs
+
+runApplication wildFireFoam
+
+#------------------------------------------------------------------------------

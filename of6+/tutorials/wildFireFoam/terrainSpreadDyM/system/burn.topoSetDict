@@ -1,0 +1,33 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(   
+    {
+        name    burnerFaces;
+        type    faceSet;
+        action  new;
+        source  boxToFace;
+        sourceInfo
+        {
+            //box (-25 0.8 -15)(-20 0.85 15); //CL for terrain.stl
+            box (-40 4.99 -15)(-39 5.01 15); //CL for terrain.stl
+        }
+    }
+);
+
+// ************************************************************************* //

@@ -1,1 +1,0 @@
-../alphatFireWallFunction/alphatFireWallFunctionFvPatchScalarField.H

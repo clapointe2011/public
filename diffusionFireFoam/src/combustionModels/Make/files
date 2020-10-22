@@ -1,3 +1,0 @@
-eddyDissipationDiffusionModel/eddyDissipationDiffusionModels.C
-
-LIB = $(FOAM_USER_LIBBIN)/libmyCombustionModels

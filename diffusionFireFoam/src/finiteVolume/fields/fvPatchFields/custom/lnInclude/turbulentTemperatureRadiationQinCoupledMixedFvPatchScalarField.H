@@ -1,1 +1,0 @@
-../turbulentTemperatureRadiationQinCoupledMixed/turbulentTemperatureRadiationQinCoupledMixedFvPatchScalarField.H

@@ -1,0 +1,113 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    top
+    {
+        //type            pressureInletOutletVelocity;
+        //value           uniform (0 0 0);
+        
+        //type            uniformInletOutlet;
+        //phi             phi;
+        //uniformInletValue uniform (0 0 0);
+        //value           (0 0 0);
+        
+        //type            fixedShearStress;
+        //value           uniform (0 0 0);
+        
+        type            slip;
+    }
+    
+    outlet
+    {
+        //type            pressureInletOutletVelocity;
+        //value           uniform (0 0 0);
+        
+        type            uniformInletOutlet;
+        phi             phi;
+        uniformInletValue uniform (0 0 0);
+        value           uniform (0 0 0);
+
+        //type            advective;
+        //value           uniform (0 0 0);
+    }
+
+    sides
+    {
+        type            pressureInletOutletVelocity;
+        value           uniform (0 0 0);
+        
+        //type            uniformInletOutlet;
+        //phi             phi;
+        //uniformInletValue uniform (0 0 0);
+        //value           (0 0 0);
+    }
+
+    inlet
+    {
+        //type            fixedValue;
+        //value           uniform (6 0 0);
+
+        type            atmBoundaryLayerInletVelocity;
+        flowDir         (1 0 0);
+        zDir            (0 1 0);
+        Uref            10; //10
+        Zref            15; //15
+        z0              uniform 0.1;
+        zGround         uniform 5; //4.9
+        value           uniform (0 0 0);
+    }
+    
+    burner
+    {
+        type            flowRateInletVelocity;
+        massFlowRate    constant 1.158; //57.9 MW, using 5e4 kJ/kg HOC for methane
+        // and 1.93 MW/m source strength for bush fires
+        //extrapolateProfile true;
+        value           uniform (0 0 0);
+
+        //type            fixedValue;
+        //value           uniform (0 0.01 0);
+    }
+
+    base
+    {
+        type            noSlip;
+    }
+
+    "(region0_to.*)"
+    {
+        type            mappedFlowRate;
+        nbrPhi          phiGas;
+        value           uniform (0 0 0);
+
+        //type            flowRateInletVelocityPyrolysisCoupled;
+        //phi             phi;
+        //nbrPhi          phiGas;
+        //rho             rho;
+        //hocSolid        1.66e7;
+        //value           uniform (0 0 0);
+    }
+}
+
+
+// ************************************************************************* //
