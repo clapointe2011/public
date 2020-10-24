@@ -2,7 +2,7 @@ Public repository for OpenFOAM development by Caelan Lapointe, Peter Hamlington,
 
 Currently includes :
 
-diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases discussed in the publication developed for of-dev (between of6 and of7).
+diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases discussed in the publication developed for of-dev (between of6 and of7; should compile for of6/of7 with minimal changes).
 Relevant publication : https://doi.org/10.1016/j.firesaf.2019.102934
 
 wildFireFoam solver code, associated custom libraries, and test cases discused in the following publication:
