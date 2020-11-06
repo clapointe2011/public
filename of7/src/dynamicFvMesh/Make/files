@@ -1,0 +1,6 @@
+dynamicFvMesh/dynamicFvMesh.C
+dynamicFvMesh/dynamicFvMeshNew.C
+staticFvMesh/staticFvMesh.C
+myDynamicRefineFvMesh/myDynamicRefineFvMesh.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyDynamicFvMesh

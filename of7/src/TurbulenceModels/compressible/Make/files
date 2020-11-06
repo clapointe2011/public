@@ -1,0 +1,4 @@
+turbulentFluidThermoModels/myTurbulentFluidThermoModels.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyCompressibleTurbulenceModels
+

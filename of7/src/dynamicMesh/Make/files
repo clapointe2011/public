@@ -1,0 +1,10 @@
+
+hexRef/hexRef.C
+hexRef/hexRefData.C
+hexRef/hexRefNew.C
+
+hexRef/hexRef3d/hexRef3d.C
+hexRef/hexRef2d/hexRef2d.C
+hexRef/hexRef2dAxi/hexRef2dAxi.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyDynamicMesh
