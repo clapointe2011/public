@@ -2,10 +2,10 @@ Public repository for OpenFOAM development by Caelan Lapointe, Peter Hamlington,
 
 Currently includes :
 
-diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases discussed in the publication developed for of-dev (between of6 and of7; should compile for of6/of7 with minimal changes).
+diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases discussed in the publication for of6/of7.
 Relevant publication : https://doi.org/10.1016/j.firesaf.2019.102934
 
-wildFireFoam solver code, associated custom libraries, and test cases discused in the following publication:
+wildFireFoam solver code for of6/7, associated custom libraries, and test cases discused in the following publication:
 C. Lapointe, N.T. Wimer, J.F. Glusman, A.S. Makowiecki, J.W. Daily, G.B. Rieker, and P.E. Hamlington. Efficient Simulation of Fire Spread Using Adaptive Mesh Refinement. Combustion Theory and Modeling (submitted)
 
 adjointRhoReactingCentralFoam, for topology optimization of reacting, compresisble flows. Works with discreteAdjointOpenFOAM, developed by Towara and Naumann 
