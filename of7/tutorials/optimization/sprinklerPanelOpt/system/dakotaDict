@@ -1,0 +1,44 @@
+# Dakota Input File
+#
+#-----------------------------------------------------------------------------
+
+
+environment
+    tabular_graphics_data
+        tabular_graphics_file = 'dakotaData.dat'
+
+method
+
+    #### For COBYLA
+    max_iterations        = 100
+    convergence_tolerance = 1e-3
+    coliny_cobyla
+        initial_delta     = 0.1
+        seed              = 123456
+
+model
+    single
+
+variables
+
+    continuous_design = 2
+        descriptors   =     'injectionAngle1'    'injectionMass'
+        initial_point =         0.9                    0.5
+        lower_bounds  =         0.0                    0.0
+        upper_bounds  =         1.0                    1.0
+
+interface
+    fork
+        analysis_driver = 'dakota.sh'
+        parameters_file = 'params.in'
+        results_file    = 'results.out'
+        deactivate active_set_vector
+    aprepro
+
+responses
+    objective_functions = 1
+    no_hessians
+    no_gradients
+    sense 'min'
+
+#-----------------------------------------------------------------------------

@@ -1,0 +1,63 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0/filmRegion";
+    object      Tf;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform  298.15;
+
+boundaryField
+{
+    region0_to_filmRegion_coupledWall // Patch to pyrolysis
+    {
+        type            mappedField;
+        sampleRegion    pyrolysisRegion;
+        sampleMode      nearestPatchFace;
+        samplePatch     region0_to_pyrolysisRegion_coupledWall;
+        flipNormals     yes;
+        offset          (0 0 0);
+        field           T;
+        setAverage      no;
+        average         0;
+        value           $internalField;
+    }
+
+    coupledWall_top // Patch to Region0
+    {
+        type            zeroGradient;
+    }
+
+    "side.*"
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    inlet
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+}
+
+// ************************************************************************* //

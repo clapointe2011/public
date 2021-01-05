@@ -1,0 +1,23 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+start=0.1
+dt=0.1
+endt=10
+
+for i in $(seq $start $dt $endt)
+do
+    j=`echo $i  | bc -l | sed '/\./ s/\.\{0,1\}0\{1,\}$//'`
+    mkdir DyMviz/$j
+    cp -rf $j/T DyMviz/$j/
+    cp -rf $j/cellLevel DyMviz/$j/
+    cp -rf $j/sQ DyMviz/$j/
+    cp -rf $j/polyMesh DyMviz/$j/
+    cp -rf $j/pyrolysisRegion DyMviz/$j/pyrolysisRegion
+    cp -rf $j/filmRegion DyMviz/$j/filmRegion
+    #cp -rf $j/lagrangian DyMviz/$j/lagrangian
+done
+
+cp -rf constant system DyMviz
+
+#------------------------------------------------------------------------------

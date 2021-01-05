@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#------------------------------------------------------------------------------
+
+dakotaInputFile="system/dakotaDict"
+dakotaOutputFile="dakotaLog"
+optimizationLogFile="optimizationLog"
+
+source createMesh
+
+echo ""
+echo "Starting Optimization with Dakota"
+
+#### DAKOTA ####
+if [ `which dakota | grep 'dakota' -c` == 1 ];
+then
+    echo "1" > .funcIter
+    dakota -i $dakotaInputFile -o $dakotaOutputFile > $optimizationLogFile
+    wait
+else
+    echo "No DAKOTA application available"
+fi
+
+#------------------------------------------------------------------------------
+
+echo "Run finished."
+
+#------------------------------------------------------------------------------

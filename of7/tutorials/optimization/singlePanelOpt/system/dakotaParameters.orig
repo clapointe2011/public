@@ -1,0 +1,6 @@
+//- This file contains the parameters that can be changed
+//  Dakota will change the parameters with {} and the name 
+//  corresponds to the variables in the dakotaDict
+
+filmFlowRate  = {filmFlowRate}
+filmTemperature = {filmTemperature}

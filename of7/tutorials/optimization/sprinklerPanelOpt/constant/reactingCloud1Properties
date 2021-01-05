@@ -1,0 +1,215 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      reactingCloud1Properties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solution
+{
+    active          yes;
+    coupled         yes;
+    transient       yes;
+    cellValueSourceCorrection yes;
+    maxCo 0.3;
+
+    sourceTerms
+    {
+        schemes
+        {
+            rho         semiImplicit 1;
+            U           semiImplicit 1;
+            Yi          semiImplicit 1;
+            h           semiImplicit 1;
+            radiation   semiImplicit 1;
+        }
+    }
+
+    interpolationSchemes
+    {
+        rho             cell;
+        U               cellPoint;
+        thermo:mu       cell;
+        T               cell;
+        G               cell;
+        Cp              cell;
+        kappa           cell;
+        p               cell;
+    }
+
+    integrationSchemes
+    {
+        U               Euler;
+        T               analytical;
+    }
+}
+
+constantProperties
+{
+    T0              298.15;
+
+    // place holders for rho0 and Cp0
+    // - reset from liquid properties using T0
+    rho0            1000;
+    Cp0             4187;
+
+    constantVolume  false;
+}
+
+subModels
+{
+    particleForces
+    {
+        sphereDrag;
+        gravity;
+    }
+
+    injectionModels
+    {
+        model1
+        {
+            type            coneInjection;
+
+            // Times
+            SOI             0;
+            duration        10;
+
+            // Quantities
+            massTotal        .67;
+            parcelBasisType  mass;
+            parcelsPerSecond 1000;
+            flowRateProfile  constant 0.1;
+
+            // Sizes
+            sizeDistribution
+            {
+                type        fixedValue;
+                fixedValueDistribution
+                {
+                    value   0.001;
+                }
+            }
+
+            // Geometry
+            position        (-0.5 1.8 0);
+            direction       (1 -1 0);
+            thetaInner      0;
+           thetaOuter       28.99;
+           
+            // Velocity
+            // - Inject with constant velocity
+            flowType        constantVelocity;
+            Umag            3.00;
+        }
+    }
+
+    dispersionModel none;
+
+    patchInteractionModel standardWallInteraction;
+
+    heatTransferModel none;
+
+    compositionModel singleMixtureFraction;
+
+    phaseChangeModel none;
+
+    devolatilisationModel none;
+
+    surfaceReactionModel none;
+
+    stochasticCollisionModel none;
+
+    surfaceFilmModel thermoSurfaceFilm;
+
+    radiation off;
+
+    standardWallInteractionCoeffs
+    {
+        type            escape;
+    }
+
+    RanzMarshallCoeffs
+    {
+        BirdCorrection  true;
+    }
+
+    singleMixtureFractionCoeffs
+    {
+        phases
+        (
+            gas
+            {
+            }
+            liquid
+            {
+                H2O 1;
+            }
+            solid
+            {
+            }
+        );
+        YGasTot0        0;
+        YLiquidTot0     1;
+        YSolidTot0      0;
+    }
+
+    liquidEvaporationCoeffs
+    {
+        enthalpyTransfer enthalpyDifference;
+
+        activeLiquids
+        (
+            H2O
+        );
+    }
+
+    thermoSurfaceFilmCoeffs
+    {
+        //interactionType absorb;
+
+        interactionType splashBai;
+        deltaWet        0.0001;
+        Adry            2630;
+        Awet            1320;
+        Cf              0.6;
+    }
+}
+
+cloudFunctions
+{
+    voidFraction1
+    {
+        type voidFraction;
+    }
+
+    /*particleCollector1
+    {
+        type            particleCollector;
+
+        mode            concentricCircle;
+        origin          (0 0 0);
+        radius          (3 3 0);
+        nSector         10;
+        refDir          (1 0 0);
+        normal          (0 -1 0);
+
+        negateParcelsOppositeNormal no;
+        removeCollected no;
+        surfaceFormat   vtk;
+        resetOnWrite    no;
+        log             yes;
+    }*/
+}
+
+
+// ************************************************************************* //

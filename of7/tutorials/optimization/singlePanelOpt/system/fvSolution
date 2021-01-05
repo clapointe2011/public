@@ -1,0 +1,102 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "rho.*"
+    {
+       solver          diagonal;
+    }
+
+    "(p_rgh|ph_rgh)"
+    {
+        solver         GAMG;
+        smoother       DICGaussSeidel;
+        tolerance      1e-6;
+        relTol         0;
+    }
+
+    "(p_rgh|ph_rgh)Final"
+    {
+        $p_rgh;
+        relTol         0;
+    }
+
+    "pcorr.*"
+    {
+        solver         PCG;
+        preconditioner
+        {
+            preconditioner  GAMG;
+            smoother        DICGaussSeidel;
+            cacheAgglomeration no;
+            tolerance       1e-2;
+            relTol          0;
+        }
+        tolerance      1e-2;
+        relTol         0;
+    }
+
+    "(U|k|h|Yi|FSD).*"
+    {
+        solver         PBiCGStab;
+        preconditioner DILU;
+        tolerance      1e-8;
+        relTol         0;
+    }
+
+    "Ii.*"
+    {
+        solver         GAMG;
+        smoother       symGaussSeidel;
+        maxIter        1;
+        nPostSweeps    1;
+        tolerance      1e-4;
+        relTol         0;
+    }
+}
+
+PIMPLE
+{
+    //PIMPLE controls
+    momentumPredictor         yes;
+    hydrostaticInitialization yes;
+    turbOnFinalIterOnly       no;
+    nOuterCorrectors          3;
+    nCorrectors               2;
+    nNonOrthogonalCorrectors  0;
+    
+    //Custom control
+    monitorConservation false;
+    origHEqn            true;
+    origPIMPLE          true;
+    protectOutlet       true;
+    correctPhi          true;
+    nCorrPhi            1;
+    startDyMIndex       1;
+}
+
+relaxationFactors
+{
+    equations
+    {
+        ".*" 1;
+    }
+}
+
+
+// ************************************************************************* //

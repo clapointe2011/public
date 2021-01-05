@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0/filmRegion";
+    object      Uf;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    coupledWall_top                 // Patch to Region0
+    {
+        type            slip;
+    }
+
+    region0_to_filmRegion_coupledWall // Patch to pyrolysis
+    {
+        type            noSlip;
+    }
+
+    outlet
+    {
+        type zeroGradient;
+    }
+
+    "side.*"
+    {
+        type            noSlip;
+    }
+
+    inlet
+    {
+        //type            flowRateInletVelocity;
+        //volumetricFlowRate 2.87e-5; // 1800 ml/min
+        //value           $internalField;
+
+        type            fixedValue;
+        rho             rhof;
+        value           uniform (0 0 0);
+    }
+}
+
+// ************************************************************************* //

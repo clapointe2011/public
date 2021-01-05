@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      radiationProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+radiation on;
+
+radiationModel  fvDOM;
+
+fvDOMCoeffs
+{
+    nPhi        2;      // azimuthal angles in PI/2 on X-Y.(from Y to X)
+    nTheta      2;      // polar angles in PI (from Z to X-Y plane)
+    tolerance   1e-4;   // convergence tolerance for radiation iteration
+    maxIter     1;     // maximum number of iterations
+}
+
+solverFreq      10;
+
+absorptionEmissionModel greyMeanCombustion;
+
+constantCoeffs
+{
+    absorptivity    0.1;
+    emissivity      0.1;
+    E               0;
+}
+
+constRadFractionCoeffs
+{
+    //Proportionality constant (EhrrCoeff*HRR) to be emitted. Source term in
+    //RTE
+    EhrrCoeff           0.6;  
+    radScaling		true;  //false;
+    Ehrr1               0.6;
+    Ehrr2		0.3;
+    patch1		(burner);
+    patch2		(region0_to_pyrolysisRegion_coupledWall);
+}
+
+greyMeanCombustionCoeffs
+{
+    lookUpTableFileName      none;
+
+    EhrrCoeff                0.20;
+}
+
+scatterModel constant;
+
+constantCoeffs
+{
+    sigma           sigma [ 0 -1 0 0 0 0 0 ] 0;
+    C               C [ 0 0 0 0 0 0 0 ] 0;
+}
+
+sootModel none;
+
+// ************************************************************************* //

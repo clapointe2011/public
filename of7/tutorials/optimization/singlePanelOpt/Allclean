@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Source tutorial clean functions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+#runApplication cleanCase
+foamCleanPolyMesh
+cleanTimeDirectories
+runApplication foamClearPolyMesh
+mv log.foamClearPolyMesh log.foamClearPolyMesh.primary
+runApplication foamClearPolyMesh -region filmRegion
+mv log.foamClearPolyMesh log.foamClearPolyMesh.filmRegion
+runApplication foamClearPolyMesh -region pyrolysisRegion
+mv log.foamClearPolyMesh log.foamClearPolyMesh.pyrolysisRegion
+rm -rf processor*
+rm *Log dakota.out dakota.rst *.out
+
+rm -rf 0
+rm -rf dynamicCode
+rm -rf runFiles log*
+
+
+#------------------------------------------------------------------------------
