@@ -9,7 +9,7 @@ wildFireFoam solver code for of6/7, associated custom libraries, and test cases 
 C. Lapointe, N.T. Wimer, J.F. Glusman, A.S. Makowiecki, J.W. Daily, G.B. Rieker, and P.E. Hamlington. Efficient Simulation of Fire Spread Using Adaptive Mesh Refinement. Combustion Theory and Modeling (submitted)
 
 adjointRhoReactingCentralFoam, for topology optimization of reacting, compresisble flows. Works with discreteAdjointOpenFOAM, developed by Towara and Naumann 
-(https://doi.org/10.1016/j.procs.2013.05.206).
+(https://doi.org/10.1016/j.procs.2013.05.206). Incorporates piso-central code of Kraposhin et. al (https://doi.org/10.1002/fld.4512, https://doi.org/10.1016/j.procs.2015.11.007).
 Relevant publication : https://doi.org/10.2514/6.2017-4115
 
 Disclaimer :
