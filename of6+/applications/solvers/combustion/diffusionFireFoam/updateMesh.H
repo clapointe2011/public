@@ -48,13 +48,13 @@
         ghf = (g & mesh.Cf()) - ghRef;
         
         //update ph_rgh for restarts
-        if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
+        /*if (pimple.dict().lookupOrDefault<bool>("hydrostaticInitialization", false))
         {
             surfaceScalarField ph_rghf = fvc::interpolate(ph_rgh);
             ph_rgh.clear();
             ph_rgh = fvc::average(ph_rghf);
             ph_rghf.clear();
-        }
+        }*/
 
         MRF.update();
                         
