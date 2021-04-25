@@ -7,6 +7,7 @@ wmake libso dynamicMesh
 wmake libso dynamicFvMesh
 wmake libso radiationModels
 wmake libso combustionModels
+wmake thermophysicalModels/solidChemistryModel
 wmake libso TurbulenceModels/compressible
 wmake libso regionModels/regionModel
 wmake libso regionModels/pyrolysisModels
