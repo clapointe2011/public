@@ -50,15 +50,8 @@ boundaryField
 
     region0_to_pyrolysisRegion_coupledWall
     {
-        //type            mappedFlowRate;
-        //nbrPhi          phiGas;
-        //value           uniform (0 0 0);
-
-        type            flowRateInletVelocityPyrolysisCoupled;
-        phi             phi;
+        type            mappedFlowRate;
         nbrPhi          phiGas;
-        rho             rho;
-        hocSolid        1.66e7;
         value           uniform (0 0 0);
     }
 }

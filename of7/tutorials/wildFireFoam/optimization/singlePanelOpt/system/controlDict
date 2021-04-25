@@ -18,8 +18,6 @@ libs
 (
     "libcustomFvPatchFields.so"
     "libmyCompressibleTurbulenceModels.so"
-    "libmyCompressibleTurbulenceModels.so"
-    //"libmyDdtSchemes.so"
 )
 
 application     wildFireFoam;

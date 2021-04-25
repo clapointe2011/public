@@ -85,7 +85,7 @@ subModels
             duration        10;
 
             // Quantities
-            massTotal        .67;
+            massTotal        1.00;
             parcelBasisType  mass;
             parcelsPerSecond 1000;
             flowRateProfile  constant 0.1;
@@ -104,7 +104,7 @@ subModels
             position        (-0.5 1.8 0);
             direction       (1 -1 0);
             thetaInner      0;
-           thetaOuter       28.99;
+           thetaOuter       81.00;
            
             // Velocity
             // - Inject with constant velocity
