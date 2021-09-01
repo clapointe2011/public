@@ -1,0 +1,115 @@
+#!/bin/bash
+
+#Adapted from tutorial located at: http://www.holzmann-cfd.de/index.php/en/
+# $1 change from DAKOTA to OF file
+# $2 pipe OF output to DAKOTA
+
+# Update OF through DAKOTA
+# ------------------------------------------------------------------------------
+dprepro $1 system/dakotaParameters.orig system/dakotaParameters
+
+# Run simulation with new parameter set
+# ------------------------------------------------------------------------------
+
+    # Get parameters and remove possible scientific notation
+    #---------------------------------------------------------------------------
+    injectionAngle1=`head -5 system/dakotaParameters | tail -1 | cut -d'=' -f2`
+    #injectionVelocity=`head -6 system/dakotaParameters | tail -1 | cut -d'=' -f2`
+    #injectionAngle2=`head -7 system/dakotaParameters | tail -1 | cut -d'=' -f2`
+    injectionMass=`head -8 system/dakotaParameters | tail -1 | cut -d'=' -f2`
+
+    injectionAngle1=`echo $injectionAngle1 | sed -e 's/[eE]+*/\*10\^/'`
+    #injectionVelocity=`echo $injectionVelocity | sed -e 's/[eE]+*/\*10\^/'`
+    #injectionAngle2=`echo $injectionAngle2 | sed -e 's/[eE]+*/\*10\^/'`
+    injectionMass=`echo $injectionMass | sed -e 's/[eE]+*/\*10\^/'`
+
+    # Rescale parameters to real values
+    #---------------------------------------------------------------------------
+    injectionAngle1Scaled=`echo "tmp=$injectionAngle1*90; scale=2; tmp/1" | bc -l`
+    #injectionVelocityScaled=`echo "tmp=$injectionVelocity*3 + 1.5; scale=2; tmp/1" | bc -l`
+    #injectionAngle2Scaled=`echo "tmp=$injectionAngle2*180 - 90; scale=2; tmp/1" | bc -l`
+    #injectionXdir=`echo "scale=6; tmp=c(($injectionAngle2Scaled)*3.14159/180); scale=3; tmp/1" | bc -l`
+    #injectionYdir=`echo "scale=6; tmp=s(($injectionAngle2Scaled)*3.14159/180); scale=3; tmp/1" | bc -l`
+
+    injectionMassScaled=`echo "tmp=$injectionMass*20 + 0.0; scale=2; tmp/1" | bc -l`
+
+    # Print current loop number and parameter values
+    #---------------------------------------------------------------------------
+    funcIter=`cat .funcIter`
+
+    >&2 echo -e ""
+    >&2 echo -e "Function Iteration : $funcIter"
+    >&2 echo "Injection cone angle : $injectionAngle1Scaled"
+    #>&2 echo "Injection velocity  : $injectionVelocityScaled"
+    #>&2 echo "Injection direction angle : $injectionAngle2Scaled"
+    >&2 echo "Injection mass : $injectionMassScaled"
+    >&2 echo -e ""
+
+    # Set new parameter values
+    #---------------------------------------------------------------------------
+    sed -i "119s/.*/            thetaOuter       $injectionAngle1Scaled;/" constant/reactingCloud1Properties
+    #sed -i "112s/.*/            Umag            $injectionVelocityScaled;/" constant/reactingCloud1Properties
+    #sed -i "97s/.*/            direction        ($injectionXdir $injectionYdir 0);/" constant/reactingCloud1Properties
+    sed -i "97s/.*/            massTotal        $injectionMassScaled;/" constant/reactingCloud1Properties
+
+    # Run OpenFOAM
+    #---------------------------------------------------------------------------
+    # Source tutorial run functions
+    . $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+    application=fireDyMFoam
+    nProcs=$(getNumberOfProcessors)
+    
+    if [ "$nProcs" -gt "1" ];
+    then
+        echo "Running $application in parallel on $nProcs processors"
+        ( mpirun -np $nProcs $application -parallel > log.$application 2>&1 )
+    else
+        echo "Running $application in serial"
+        ( $application > log.$application 2>&1 )
+    fi
+
+    # Get desired quantitites and update cost function
+    #---------------------------------------------------------------------------
+    #postProcess -func integrateHRR -time '5:6' > log.integrateHRR
+    #grep "volIntegrate() of Qdot " log.integrateHRR | awk '{print $5}' > intHRR.txt
+    #meanIntHRR=`awk '{ total += $1; count++ } END { print total/count }' intHRR.txt`
+    #func=`echo 0.75*$meanIntHRR/73263+ 0.25*$injectionMassScaled/1 | bc -l`
+
+
+    solidMassLoss=`grep "Total gas mass produced " log.fireDyMFoam | tail -1 | awk '{print $7}'`
+    solidMassLoss=`echo $solidMassLoss | sed -e 's/[eE]+*/\*10\^/'`
+    #posMean=`awk '{print $13}' postProcessing/swakExpression_cloudPosVar/0/cloudPosition | tail -1 | tr -d '()'`
+    #posMean=`awk '{print $2}' postProcessing/swakExpression_cloudPosVar/0/cloudPosVar | tail -1`
+    func=`echo "0.5*$solidMassLoss/0.00359809773201 + 0.5*$injectionMassScaled/10" | bc -l`
+    #func=`echo "0.5*($posMean/0.17898) + 0.5*$injectionMassScaled/1" | bc -l`
+
+    echo $func > .dakotaInput.dak
+
+    >&2 echo -e ""
+    #>&2 echo "Mean Integrated HRR : $meanIntHRR"
+    >&2 echo "Solid mass loss : $solidMassLoss"
+    #>&2 echo "Mean z pos var : $posMean"
+    #>&2 echo "Cost Function : $func"
+    >&2 echo -e ""
+
+    # Clean Case
+    #---------------------------------------------------------------------------
+    mkdir runFiles/Optimization$funcIter
+    #cp -rf 5 constant system log.wildFireFoam runFiles/Optimization$funcIter
+    cp -rf log.fireDyMFoam runFiles/Optimization$funcIter
+
+    #foamListTimes -rm
+    foamListTimes -rm
+
+    # Increase the loop number and store in dummy file
+    #--------------------------------------------------------------------------
+    echo $((funcIter+1)) > .funcIter
+
+# Pipe output file to DAKOTA
+#------------------------------------------------------------------------------
+cp .dakotaInput.dak $2
+
+sleep 1
+
+#------------------------------------------------------------------------------

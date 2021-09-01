@@ -56,7 +56,6 @@ class dynamicFvMesh
         //- The dynamicMeshDict
         dictionary dynamicMeshDict_;
 
-
     // Private Member Functions
 
         //- Return the dynamicMeshDict IOobject
@@ -169,6 +168,11 @@ public:
         //- Update the mesh for both mesh motion and topology change
         virtual bool update() = 0;
 
+        //- Balance mesh
+        virtual bool redistribute() = 0;
+
+        //- Check imbalance
+        virtual bool balance() = 0;
 
     // Member Operators
 

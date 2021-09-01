@@ -1,0 +1,116 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+{
+        libs ("libsampling.so");
+        
+        type                    sets;
+        writeControl            outputTime;
+        writeInterval           1;
+        setFormat               raw;
+        interpolationScheme     cellPoint;
+
+        fields
+        (
+            T
+        );
+        
+        sets
+        (
+            h0.1
+            {
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 0.24 -0.3);
+                end             (0.1499 0.24 0.3);
+                nPoints         30;
+            }
+
+            h0.2
+            {   
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 0.48 -0.3);
+                end             (0.1499 0.48 0.3);
+                nPoints         30;
+            }
+
+            h0.3
+            {   
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 0.72 -0.3);
+                end             (0.1499 0.72 0.3);
+                nPoints         30;
+            }
+
+            h0.4
+            {   
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 0.96 -0.3);
+                end             (0.1499 0.96 0.3);
+                nPoints         30;
+            }
+
+            h0.5
+            {   
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 1.20 -0.3);
+                end             (0.1499 1.20 0.3);
+                nPoints         30;
+            }
+
+            h0.6
+            {   
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 1.44 -0.3);
+                end             (0.1499 1.44 0.3);
+                nPoints         30;
+            }
+
+            h0.7
+            {   
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 1.68 -0.3);
+                end             (0.1499 1.68 0.3);
+                nPoints         30;
+            }
+
+            h0.8
+            {   
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 1.92 -0.3);
+                end             (0.1499 1.92 0.3);
+                nPoints         30;
+            }
+
+            h0.9
+            {   
+                type            lineUniform;
+                axis            z;
+                start           (0.1499 2.16 -0.3);
+                end             (0.1499 2.16 0.3);
+                nPoints         30;
+            }
+        );
+}
+
+
+// ************************************************************************* //

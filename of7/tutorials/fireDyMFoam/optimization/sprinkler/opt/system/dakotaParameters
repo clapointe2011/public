@@ -1,0 +1,8 @@
+//- This file contains the parameters that can be changed
+//  Dakota will change the parameters with {} and the name 
+//  corresponds to the variables in the dakotaDict
+
+injectionAngle1 = 1.550859197349715e-01
+injectionVelocity = {injectionVelocity}
+//injectionAngle2 = {injectionAngle2}
+injectionMass = 5.023862334616704e-02

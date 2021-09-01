@@ -1,0 +1,17 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+for i in $(seq 0.1 0.1 15)
+do
+    j=`echo $i  | awk '{ if ($0 ~ /\./){ sub("0*$","",$0); sub ("\\.$","",$0);} print}'`
+    mkdir DyMviz/$j
+    cp -rf $j/T DyMviz/$j/
+    cp -rf $j/cellLevel DyMviz/$j/
+    cp -rf $j/sQ DyMviz/$j/
+    cp -rf $j/Qdot DyMviz/$j/
+    cp -rf $j/polyMesh DyMviz/$j/
+    cp -rf $j/panelRegion DyMviz/$j/panelRegion
+    cp -rf constant system DyMviz
+done
+
+#------------------------------------------------------------------------------

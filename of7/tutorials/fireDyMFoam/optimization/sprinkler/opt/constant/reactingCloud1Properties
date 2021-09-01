@@ -1,0 +1,209 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      reactingCloud1Properties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solution
+{
+    active          yes;
+    coupled         yes;
+    transient       yes;
+    cellValueSourceCorrection yes;
+    maxCo 0.3;
+
+    sourceTerms
+    {
+        schemes
+        {
+            rho         semiImplicit 1;
+            U           semiImplicit 1;
+            Yi          semiImplicit 1;
+            h           semiImplicit 1;
+            radiation   semiImplicit 1;
+        }
+    }
+
+    interpolationSchemes
+    {
+        rho             cell;
+        U               cellPoint;
+        thermo:mu       cell;
+        T               cell;
+        G               cell;
+        Cp              cell;
+        kappa           cell;
+        p               cell;
+    }
+
+    integrationSchemes
+    {
+        U               Euler;
+        T               analytical;
+    }
+}
+
+constantProperties
+{
+    rho0            1000;
+    T0              298.15;
+    Cp0             4187;
+
+    youngsModulus   1e9;
+    poissonsRatio   0.35;
+
+    epsilon0        1;
+    f0              0.5;
+    Pr              0.7;
+    Tvap            273;
+    Tbp             373;
+    TDevol          373;
+    LDevol          0;
+    hRetentionCoeff 1;
+
+    constantVolume  false;
+}
+
+subModels
+{
+    particleForces
+    {
+        sphereDrag;
+        gravity;
+    }
+
+    injectionModels
+    {
+        model1
+        {
+            type            coneInjection;
+
+            // Times
+            SOI             0;
+            duration        100;
+
+            // Quantities
+            massTotal        1.00;
+            parcelBasisType  mass;
+            parcelsPerSecond 5000;
+            flowRateProfile  constant 1;
+
+            // Sizes
+            sizeDistribution
+            {
+                type         uniform;
+                uniformDistribution
+                {
+                    minValue        0.001;
+                    maxValue        0.002;
+                    d               ( 7.5e-05 );
+                    n               ( 0.5 );
+                }
+            }
+
+            // Geometry
+            position        (-0.5 2.4 0);
+            direction       (1 -1 0);
+            thetaInner      0;
+            thetaOuter       13.95;
+           
+            // Velocity
+            // - Inject with constant velocity
+            flowType        constantVelocity;
+            Umag            3;
+        }
+    }
+
+    dispersionModel none;
+
+    patchInteractionModel standardWallInteraction;
+
+    heatTransferModel none;
+
+    compositionModel singleMixtureFraction;
+
+    phaseChangeModel none;
+
+    devolatilisationModel none;
+
+    surfaceReactionModel none;
+
+    stochasticCollisionModel none;
+
+    surfaceFilmModel thermoSurfaceFilm;
+
+    radiation off;
+
+    standardWallInteractionCoeffs
+    {
+        type            escape;
+    }
+
+    RanzMarshallCoeffs
+    {
+        BirdCorrection  false;
+    }
+
+    singleMixtureFractionCoeffs
+    {
+        phases
+        (
+            gas
+            {
+            }
+            liquid
+            {
+                H2O 1;
+            }
+            solid
+            {
+            }
+        );
+        YGasTot0        0;
+        YLiquidTot0     1;
+        YSolidTot0      0;
+    }
+
+    liquidEvaporationCoeffs
+    {
+        enthalpyTransfer enthalpyDifference;
+
+        activeLiquids
+        (
+            H2O
+        );
+    }
+
+    thermoSurfaceFilmCoeffs
+    {
+        interactionType absorb;
+
+        //interactionType splashBai;
+        //deltaWet        0.0001;
+        //Adry            2630;
+        //Awet            1320;
+        //Cf              0.6;
+    }
+}
+
+cloudFunctions
+{
+    voidFraction1
+    {
+        type voidFraction;
+    }
+}
+
+
+// ************************************************************************* //

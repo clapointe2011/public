@@ -1,0 +1,19 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+-------------------------------------------------------------------------------
+Description
+    Calculates the heat-flux at wall patches, outputting the data as a
+    volScalarField.
+\*---------------------------------------------------------------------------*/
+
+type            wallHeatFlux;
+libs            ("libfieldFunctionObjects.so");
+
+executeControl  writeTime;
+writeControl    writeTime;
+
+// ************************************************************************* //

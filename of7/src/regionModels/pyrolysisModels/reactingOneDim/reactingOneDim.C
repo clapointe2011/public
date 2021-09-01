@@ -31,7 +31,6 @@ License
 #include "fvcLaplacian.H"
 #include "absorptionEmissionModel.H"
 #include "fvOptions.H"
-#include "OFstream.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -58,6 +57,8 @@ void reactingOneDim::readReactingOneDimControls()
     time().controlDict().lookup("maxDi") >> maxDiff_;
 
     coeffs().lookup("minimumDelta") >> minimumDelta_;
+
+    coeffs().lookup("writeData") >> writeData_;
 
     coeffs().lookup("gasHSource") >> gasHSource_;
     coeffs().lookup("qrHSource") >> qrHSource_;
@@ -471,7 +472,7 @@ reactingOneDim::reactingOneDim
     gasHSource_(false),
     qrHSource_(false),
     useChemistrySolvers_(true),
-    writeMassLoss_(true)
+    writeData_(false)
 {
     if (active_)
     {
@@ -572,7 +573,7 @@ reactingOneDim::reactingOneDim
     gasHSource_(false),
     qrHSource_(false),
     useChemistrySolvers_(true),
-    writeMassLoss_(true)
+    writeData_(false)
 {
     if (active_)
     {
@@ -725,24 +726,25 @@ void reactingOneDim::evolveRegion()
         << gMax(solidThermo_->T().primitiveField())
         << nl << endl;
 
-    if (writeMassLoss_)
+
+    if (writeData_)
     {
         std::ofstream file;
-	file.open("massLoss.txt", std::ofstream::out | std::ofstream::app);
-	dimensionedScalar lostMass = fvc::domainIntegrate(solidChemistry_->RRs())*time_.deltaT();
+        file.open("massLoss.txt", std::ofstream::out | std::ofstream::app);
+        dimensionedScalar lostMass = fvc::domainIntegrate(solidChemistry_->RRs())*time_.deltaT();
         if (Pstream::master())
-	{
+        {
             if (regionMesh().time().timeIndex() == 1)
             {
-                file << "Time [s]" << tab << "Mass loss [kg]" << nl
-                     << regionMesh().time().timeName() << tab << lostMass.value() << std::endl;
+                file << "Time [s]" << tab << "Mass loss [kg]" << tab << "Pyrolysis Gases [kg/s]" << nl
+                     << regionMesh().time().timeName() << tab << lostMass.value() << tab << totalGasMassFlux_ << std::endl;
             }
             else
             {
-                file << regionMesh().time().timeName() << tab << lostMass.value() << std::endl;
+                file << regionMesh().time().timeName() << tab << lostMass.value() << tab << totalGasMassFlux_ << std::endl;
             }
         }
-	file.close();
+        file.close();
     }
 }
 

@@ -15,9 +15,9 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dynamicFvMesh   myDynamicRefineFvMesh;
+dynamicFvMesh   dynamicRefineFvMesh;
 
-myDynamicRefineFvMeshCoeffs
+dynamicRefineFvMeshCoeffs
 {
     // How often to refine
     refineInterval 3;

@@ -24,5 +24,6 @@ wmake diffusionFireFoam
 wmake diffusionFireFoam/rhoDiffusionFireFoam
 wmake wildFireFoam
 wmake wildFireFoam/rhoWildFireFoam
+wmake fireDyMFoam
 cd ../../..
 

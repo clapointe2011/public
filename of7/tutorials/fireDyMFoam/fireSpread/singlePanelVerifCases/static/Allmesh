@@ -1,0 +1,22 @@
+#!/bin/bash
+
+mkdir runFiles
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+application=fireDyMFoam
+
+runApplication blockMesh
+runApplication snappyHexMesh -overwrite
+runApplication -s f \
+	    topoSet -dict system/f.topoSetDict
+
+# create the pyrolysis region.
+runApplication myExtrudeToRegionMesh -overwrite
+
+runApplication decomposePar -allRegions
+
+mv log.* runFiles
+
+#------------------------------------------------------------------------------

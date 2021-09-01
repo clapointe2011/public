@@ -80,6 +80,11 @@ public:
         //- Dummy update function which does not change the mesh
         virtual bool update();
 
+        //- Balance mesh
+        virtual bool redistribute();
+
+        //- Check imbalance
+        virtual bool balance();
 
     // Member Operators
 

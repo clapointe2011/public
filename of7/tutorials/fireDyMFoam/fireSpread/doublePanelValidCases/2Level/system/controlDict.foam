@@ -1,0 +1,226 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+libs
+(
+    "libcustomFvPatchFields.so"
+    "libcustomFvPatchFields.so"
+);
+
+application     fireFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         120;
+
+deltaT          1e-5;
+
+writeControl    adjustableRunTime;
+
+writeInterval   0.25;
+
+purgeWrite      0;
+
+writeFormat     binary;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+graphFormat     raw;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           0.4;
+
+maxDi           0.25;
+
+maxDeltaT       0.02;
+
+OptimisationSwitches
+{
+    //- Parallel IO file handler
+    //  uncollated (default), collated or masterUncollated
+    fileHandler collated;
+}
+
+functions
+{
+    vorticity
+    {
+       libs ("libutilityFunctionObjects.so");
+
+       type coded;
+       name vorticity;
+
+       codeExecute
+       #{
+          const volVectorField& U = mesh().lookupObject<volVectorField>("U");
+
+          volScalarField tvort = 0.5*magSqr(fvc::curl(U));
+          //volScalarField tvort = mag(fvc::curl(U));
+
+          tvort -= min(tvort);
+          tvort /= max(tvort);
+
+          static autoPtr<volScalarField> pField;
+          if(!pField.valid())
+          {
+              pField.set
+              (
+                  new volScalarField
+                  (
+                      IOobject
+                      (
+                          "sV",
+                          mesh().time().timeName(),
+                          U.mesh(),
+                          IOobject::NO_READ,
+                          IOobject::AUTO_WRITE
+                      ),
+                      tvort
+                  )
+              );
+          }
+
+          volScalarField& sV = pField();
+
+          sV.checkIn();
+
+          sV = tvort;
+      #};
+    }
+
+    sQdot
+    {
+       libs ("libutilityFunctionObjects.so");
+
+       type coded;
+       name sQdot;
+
+       codeExecute
+       #{
+          const volScalarField& Qdot = mesh().lookupObject<volScalarField>("Qdot");
+
+          volScalarField q = Qdot;
+          //q.ref() *= mesh().V();
+
+          q -= min(q);
+          q /= (max(q) + dimensionedScalar("small",q.dimensions(),VSMALL));
+
+          static autoPtr<volScalarField> pField;
+          if(!pField.valid())
+          {
+              pField.set
+              (
+                  new volScalarField
+                  (
+                      IOobject
+                      (
+                          "sQ",
+                          mesh().time().timeName(),
+                          Qdot.mesh(),
+                          IOobject::NO_READ,
+                          IOobject::AUTO_WRITE
+                      ),
+                      q
+                  )
+              );
+          }
+
+          volScalarField& sQ = pField();
+
+          sQ.checkIn();
+
+          sQ = q;
+
+          volScalarField varsq = mag(fvc::grad(q));
+          varsq -= min(varsq);
+          varsq /= max(varsq + dimensionedScalar("small",varsq.dimensions(),VSMALL));
+
+          static autoPtr<volScalarField> pField1;
+          if(!pField1.valid())
+          {
+              pField1.set
+              (
+                  new volScalarField
+                  (
+                      IOobject
+                      (
+                          "varsQ",
+                          mesh().time().timeName(),
+                          Qdot.mesh(),
+                          IOobject::NO_READ,
+                          IOobject::AUTO_WRITE
+                      ),
+                      varsq
+                  )
+              );
+          }
+
+          volScalarField& varsQ = pField1();
+
+          varsQ.checkIn();
+
+          varsQ = varsq;
+      #};
+    }
+
+    /*samplePlanes
+    {
+        type surfaces;
+        libs ("libsampling.so");
+        
+        writeControl            outputTime;
+        writeInterval           1;
+
+        interpolationScheme cellPoint;
+
+        surfaceFormat           vtk;
+
+        surfaces
+        (
+            cuttingPlane
+            {
+                type         cuttingPlane;
+                planeType    pointAndNormal;
+                pointAndNormalDict
+                {
+                    basePoint    (0 0 0.001);
+                    normalVector (0 0 1);
+                }
+                interpolate  true;
+            }
+        );
+
+        fields
+        (
+            T
+        );
+    }*/
+}
+
+// ************************************************************************* //

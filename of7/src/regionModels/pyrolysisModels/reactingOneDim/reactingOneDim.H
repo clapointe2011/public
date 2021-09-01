@@ -150,7 +150,7 @@ protected:
             bool useChemistrySolvers_;
 
             //- Write mass loss to file
-            bool writeMassLoss_;
+            bool writeData_;
 
     // Protected member functions
 

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+cp -rf 0_backup 0
+
+mkdir runFiles
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+application=fireDyMFoam
+
+./Allmesh
+
+nProcs=$(getNumberOfProcessors)
+
+if [ "$nProcs" -gt "1" ];
+then
+    echo "Running $application in parallel on $nProcs processors"
+    ( mpirun -np $nProcs $application -parallel > log.$application 2>&1 )
+else
+    echo "Running $application in serial"
+    ( $application > log.$application 2>&1 )
+fi
+
+#------------------------------------------------------------------------------

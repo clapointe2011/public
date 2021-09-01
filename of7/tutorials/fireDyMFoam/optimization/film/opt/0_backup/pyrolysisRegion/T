@@ -1,0 +1,56 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 298.15;
+
+boundaryField
+{
+    ".*"
+    {
+        type            zeroGradient;
+    }
+
+   "(region0_to.*)"
+    {
+        type            filmPyrolysisRadiativeCoupledMixed;
+        pyrolysisRegion pyrolysisRegion;
+        filmRegion      filmRegion;
+        Tnbr            T;
+        kappaMethod     solidThermo;
+        qrNbr           qr;
+        qr              none;
+        filmDeltaDry    0.0;
+        filmDeltaWet    2e-4;
+        value           $internalField;
+
+        //type            compressible::myFilmPyrolysisRadiativeCoupledMixed;
+        //pyrolysisRegion pyrolysisRegion;
+        //filmRegion      filmRegion;
+        //Tnbr            T;
+        //kappaMethod     solidThermo;
+        //emissivityMode  solidRadiation;
+        //qrNbr           qr; //dummy
+        //qr              none;
+        //value           $internalField;
+    }
+
+}
+
+
+// ************************************************************************* //

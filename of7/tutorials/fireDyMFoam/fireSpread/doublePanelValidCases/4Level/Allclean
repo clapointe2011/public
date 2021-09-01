@@ -1,0 +1,15 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial clean functions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+cleanCase
+
+rm -rf runFiles
+rm -rf 0
+rm -rf constant/panelRegion/polyMesh
+rm -rf constant/polyMesh
+rm *.txt
+
+#------------------------------------------------------------------------------

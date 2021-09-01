@@ -1,6 +1,9 @@
 dynamicFvMesh/dynamicFvMesh.C
 dynamicFvMesh/dynamicFvMeshNew.C
 staticFvMesh/staticFvMesh.C
-myDynamicRefineFvMesh/myDynamicRefineFvMesh.C
+dynamicRefineFvMesh/dynamicRefineFvMesh.C
+dynamicRefineMotionSolverFvMesh/dynamicRefineMotionSolverFvMesh.C
+dynamicRefineBalanceFvMesh/dynamicRefineBalanceFvMesh.C
+dynamicRefineBalanceMultiRegionFvMesh/dynamicRefineBalanceMultiRegionFvMesh.C
 
 LIB = $(FOAM_USER_LIBBIN)/libmyDynamicFvMesh

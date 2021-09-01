@@ -1,0 +1,77 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      dynamicMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dynamicFvMesh   dynamicRefineBalanceMultiRegionFvMesh;
+
+allowableImbalance 0.15;
+
+dynamicRefineBalanceMultiRegionFvMeshCoeffs
+{
+    // How often to refine
+    refineInterval 3;
+
+    // Field to be refinement on
+    fields (sQ varsQ);
+    
+    //Refinement field dictionaries
+    "(sQ|varsQ)"
+    {
+        lowerRefineLevel    0.001;
+        upperRefineLevel    1;
+        unrefineLevel       0.001;
+        maxRefinement       3;
+        nBufferLayers       3;
+    }
+
+    sEnst
+    {
+        lowerRefineLevel    0.1;
+        upperRefineLevel    1;
+        unrefineLevel       0.1;
+        maxRefinement       3;
+        nBufferLayers       3;
+    }
+
+    reactingCloud1Theta
+    {
+        lowerRefineLevel    1e-6;
+        upperRefineLevel    1;
+        unrefineLevel       1e-6;
+        maxRefinement       1;
+        nBufferLayers       1;
+    }
+
+    // Stop refinement if maxCells reached
+    maxCells        1000000;
+
+    // Flux field and corresponding velocity field. Fluxes on changed
+    // faces get recalculated by interpolating the velocity. Use 'none'
+    // on surfaceScalarFields that do not need to be reinterpolated.
+    correctFluxes
+    (
+        (phi none)
+        (phi_0 none)
+        (phi_0_0 none)
+        (ghf none)
+    );
+
+    // Write the refinement level as a volScalarField
+    dumpLevel       true;
+}
+
+
+// ************************************************************************* //

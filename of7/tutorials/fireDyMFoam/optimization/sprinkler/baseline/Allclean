@@ -1,0 +1,15 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+rm -rf 0.* 1* 2* 3* 4* 5* 6* 7* 8* 9*
+rm -f 0/ph_rgh
+rm -rf constant/panelRegion/polyMesh
+rm  -f 0/polyMesh/cellMap
+rm  -f constant/polyMesh/boundary
+rm -rf processor*
+rm log*
+rm -rf 0
+rm -rf dynamicCode
+rm -rf runFiles
+rm *.txt
+#------------------------------------------------------------------------------

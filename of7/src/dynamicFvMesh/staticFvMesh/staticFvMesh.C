@@ -58,5 +58,15 @@ bool Foam::staticFvMesh::update()
     return false;
 }
 
+bool Foam::staticFvMesh::redistribute()
+{
+    return false;
+}
+
+bool Foam::staticFvMesh::balance()
+{
+    return false;
+}
+
 
 // ************************************************************************* //

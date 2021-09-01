@@ -1,0 +1,140 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  4.x                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "rho.*"
+    {
+       solver          diagonal;
+    }
+
+    "(p_rgh|ph_rgh)"
+    {
+        solver         PCG;
+        preconditioner
+        {
+            preconditioner  GAMG;
+            smoother        DICGaussSeidel;
+            tolerance       1e-6;
+            relTol          1e-2;
+        }
+        tolerance      1e-6;
+        relTol         1e-2;
+
+        //solver         GAMG;
+        //smoother       DICGaussSeidel;
+        //tolerance      1e-6;
+        //relTol         0;
+    }
+
+    "(p_rgh|ph_rgh)Final"
+    {
+        $p_rgh;
+        relTol         0;
+    }
+
+    "pcorr.*"
+    {
+        solver         PCG;
+        preconditioner
+        {
+            preconditioner  GAMG;
+            smoother        DICGaussSeidel;
+            cacheAgglomeration no;
+            tolerance       1e-2;
+            relTol          0;
+        }
+        tolerance      1e-2;
+        relTol         0;
+    }
+
+    "(U|k)"
+    {
+        //solver         PBiCGStab;
+        //preconditioner DILU;
+        solver         smoothSolver;
+        smoother       symGaussSeidel;
+        tolerance      1e-6;
+        relTol         0.1;
+        nSweeps        1;
+    }
+
+    "(U|k)Final"
+    {
+        $U;
+        tolerance      1e-6;
+        relTol         0;
+    }
+
+    "(h|Yi)"
+    {
+        $U;
+        tolerance      1e-8;
+        relTol         0.1;
+    }
+
+    "(h|Yi)Final"
+    {   
+        $U;
+        tolerance      1e-8;
+        relTol         0;
+    }
+
+    "Ii.*"
+    {
+        solver         GAMG;
+        smoother       symGaussSeidel;
+        tolerance      1e-4;
+        relTol         0;
+        maxIter        1;
+    }
+}
+
+PIMPLE
+{
+    //PIMPLE controls
+    momentumPredictor         yes;
+    hydrostaticInitialization yes;
+    turbOnFinalIterOnly       no;
+    nOuterCorrectors          1;
+    nCorrectors               3;
+    nNonOrthogonalCorrectors  0;
+    
+    //Custom control
+    combInPimple  true;
+    radInPimple   true;
+    correctPhi    true;
+    startDyMIndex 1;
+    turbInPiso    false;
+    energyInPiso  true;
+}
+
+relaxationFactors
+{
+    equations
+    {
+        ".*"                    1.0;
+
+        //"(U|k)"                 0.9;
+        //"(U|k)Final"            1.0;
+        //"(CH4|O2|CO2|H2O)"      0.9;
+        //"(CH4|O2|CO2|H2O)Final" 1.0;
+    }
+}
+
+
+// ************************************************************************* //

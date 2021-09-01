@@ -1,0 +1,75 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 298.15;
+
+boundaryField
+{
+    ground
+    {
+        type            zeroGradient;
+    }
+
+    top
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    burner
+    {
+        type            fixedValue;
+        value           $internalField;
+    }
+
+    sides
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    "(region0_to.*)"
+    {
+        type            filmPyrolysisRadiativeCoupledMixed;
+        pyrolysisRegion pyrolysisRegion;
+        filmRegion      filmRegion;
+        Tnbr            T;
+        kappaMethod     fluidThermo;
+        qrNbr           none;
+        qr              qr;
+        filmDeltaDry    0.0;
+        filmDeltaWet    2e-4;
+        value           $internalField;
+
+        //type            compressible::myFilmPyrolysisRadiativeCoupledMixed;
+        //pyrolysisRegion pyrolysisRegion;
+        //filmRegion      filmRegion;
+        //Tnbr            T;
+        //kappaMethod     fluidThermo;
+        //emissivityMode  solidRadiation;
+        //qrNbr           none;
+        //qr              qr; //dummy
+        //value           $internalField;
+    }
+}
+
+
+// ************************************************************************* //
