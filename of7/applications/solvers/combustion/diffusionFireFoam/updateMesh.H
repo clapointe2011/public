@@ -2,7 +2,7 @@
     scalar timeBeforeMeshUpdate = runTime.elapsedCpuTime();
 
     // Test : disable refinement for some cells
-    PackedBoolList& protectedCell = refCast<myDynamicRefineFvMesh>(mesh).protectedCell();
+    PackedBoolList& protectedCell = refCast<dynamicRefineFvMesh>(mesh).protectedCell();
 
     if (protectOutlet)
     {

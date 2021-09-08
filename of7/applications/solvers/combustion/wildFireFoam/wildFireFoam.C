@@ -46,7 +46,7 @@ Description
 #include "CombustionModel.H"
 #include "pimpleControl.H"
 #include "fvOptions.H"
-#include "myDynamicRefineFvMesh.H"
+#include "dynamicRefineFvMesh.H"
 #include "cellSet.H"
 #include "CorrectPhi.H"
 

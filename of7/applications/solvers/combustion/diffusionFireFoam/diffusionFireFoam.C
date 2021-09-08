@@ -43,7 +43,7 @@ Description
 #include "fvOptions.H"
 #include "localEulerDdtScheme.H"
 #include "fvcSmooth.H"
-#include "myDynamicRefineFvMesh.H"
+#include "dynamicRefineFvMesh.H"
 #include "CMULES.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

@@ -48,7 +48,7 @@ Description
 #include "fvOptions.H"
 #include "dynamicFvMesh.H"
 #include "motionSolver.H"
-#include "myDynamicRefineFvMesh.H"
+#include "dynamicRefineFvMesh.H"
 #include "cellSet.H"
 #include "CorrectPhi.H"
 #include "CMULES.H"
