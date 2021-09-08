@@ -1,17 +1,20 @@
 Public repository for OpenFOAM development by Caelan Lapointe, Peter Hamlington, and co-authors.
 
-Currently includes :
+Currently includes:
 
-diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases discussed in the publication for of6/of7.
-Relevant publication : https://doi.org/10.1016/j.firesaf.2019.102934
+diffusionFireFoam solver code, updated dynamicRefineFvMesh library, and test cases.
+Relevant publication: https://doi.org/10.1016/j.firesaf.2019.102934
 
 wildFireFoam solver code for of6/7, associated custom libraries, and test cases discused in the following publication:
 C. Lapointe, N.T. Wimer, J.F. Glusman, A.S. Makowiecki, J.W. Daily, G.B. Rieker, and P.E. Hamlington. Efficient Simulation of Fire Spread Using Adaptive Mesh Refinement. Combustion Theory and Modeling (submitted)
 
+fireDyMFoam solver code for of7, associated custom libraries, and example cases.
+Relevant publication: https://doi.org/10.3390/fluids6090323
+
 adjointRhoReactingCentralFoam, for topology optimization of reacting, compresisble flows. Works with discreteAdjointOpenFOAM, developed by Towara and Naumann 
 (https://doi.org/10.1016/j.procs.2013.05.206). Incorporates piso-central code of Kraposhin et. al (https://doi.org/10.1002/fld.4512, https://doi.org/10.1016/j.procs.2015.11.007).
-Relevant publication : https://doi.org/10.2514/6.2017-4115
+Relevant publication: https://doi.org/10.2514/6.2017-4115
 
-Disclaimer :
+Disclaimer:
 
 This offering is not approved or endorsed by OpenCFD Limited, producer and distributor of the OpenFOAM software via www.openfoam.com, and owner of the OPENFOAM$\textregistered$ and OpenCFD$\textregistered$ trade marks.
